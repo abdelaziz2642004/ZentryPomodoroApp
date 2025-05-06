@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/profileAvatar.dart';
+import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/CustomAppBar.dart';
+import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/CustomDrawer.dart';
+import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RecentlyJoined.dart';
+import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RoomsGridBuilder.dart';
+import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/TimeTrackerToday.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -11,22 +15,45 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      drawer: const Customdrawer(),
+      appBar: Customappbar.build(),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [ProfileAvatar()],
-              ),
-            ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Timetrackertoday(),
 
-            Expanded(child: SingleChildScrollView(child: Column(children: [
-                  ],
-                ))),
-          ],
+              const SizedBox(height: 24),
+
+              const Text(
+                "Recently Joined",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Recentlyjoined(),
+
+              const SizedBox(height: 24),
+
+              // Rooms Grid
+              const Text(
+                "Public Rooms",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              const Roomsgridbuilder(),
+
+              const SizedBox(height: 24),
+              Center(
+                child: Text(
+                  "Avatar & Creator",
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
