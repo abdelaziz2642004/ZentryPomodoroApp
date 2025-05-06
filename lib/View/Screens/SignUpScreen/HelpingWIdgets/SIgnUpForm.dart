@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/View/Screens/LoginScreen/HelpingWidgets/signInButton.dart';
 import 'package:prj/View/Screens/SignUpScreen/HelpingWIdgets/ImagePIcker.dart';
 import 'package:prj/View/Screens/SignUpScreen/HelpingWIdgets/customPasswordField.dart';
 import 'package:prj/View/Screens/SignUpScreen/HelpingWIdgets/fullNamefield.dart';
+import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
+import 'package:prj/ViewModel/Cubits/Auth/Auth_states.dart';
 import 'package:prj/ViewModel/Services/signUpService.dart';
 import 'package:prj/core/colors.dart';
 
@@ -19,7 +22,8 @@ class _SignupFormState extends State<SignupForm> {
   @override
   void initState() {
     super.initState();
-    signupservice = Signupservice(rebuild: setState, context: context);
+    signupservice = Signupservice(context: context);
+    BlocProvider.of<AuthCubit>(context).signupService = signupservice;
   }
 
   @override
@@ -64,30 +68,44 @@ class _SignupFormState extends State<SignupForm> {
 
           const SizedBox(height: 20),
 
-          TextFormField(
-            validator: (value) {
-              if (value == null) {
-                return null;
-              } else if (value.length < 4)
-                return "Username must be 4 or more characters :D";
-              return null;
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              return TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Username cannot be empty';
+                  } else if (value.length < 4) {
+                    return 'Username must be 4 or more characters';
+                  } else if (state is AuthErrorState) {
+                    return state.error;
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  BlocProvider.of<AuthCubit>(
+                    context,
+                  ).checkUsernameAvailaibility(value.trim());
+                },
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  labelStyle: const TextStyle(fontFamily: "DopisBold"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  prefixIcon: const Icon(Icons.person, color: mainColor),
+                  errorText: state is AuthErrorState ? state.error : null,
+                ),
+              );
             },
-            onChanged: signupservice.checkUsername, // will pass
-            decoration: InputDecoration(
-              labelText: 'Username',
-              labelStyle: const TextStyle(fontFamily: "DopisBold"),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              prefixIcon: const Icon(Icons.email, color: mainColor),
-              errorText: signupservice.usernameError, // will pass
-            ),
           ),
           const SizedBox(height: 20),
 
           customPasswordfield(
             labelText: "Password",
-            onChanged: (value) => signupservice.password = value,
+            onChanged:
+                (value) =>
+                    signupservice.password =
+                        value, // dh hysm3 brdo fe el cubit 3la fekra , same object :D
             obsecurePassword: signupservice.obscurePassword1,
             onPressed:
                 () => setState(
@@ -138,8 +156,9 @@ class _SignupFormState extends State<SignupForm> {
           const SizedBox(height: 20),
 
           SignButton(
-            isLoading: signupservice.isLoading,
-            onPressed: signupservice.signUp,
+            onPressed: () {
+              BlocProvider.of<AuthCubit>(context).signUp(context);
+            },
             type: "Up",
           ),
         ],

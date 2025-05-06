@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prj/core/colors.dart';
 
 class EmailorUsernameField extends StatelessWidget {
   final Function(String) onChanged;
@@ -26,7 +27,7 @@ class EmailorUsernameField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0)),
         ),
-        prefixIcon: Icon(Icons.email, color: Color.fromARGB(255, 221, 156, 17)),
+        prefixIcon: Icon(Icons.email, color: mainColor),
       ),
     );
   }

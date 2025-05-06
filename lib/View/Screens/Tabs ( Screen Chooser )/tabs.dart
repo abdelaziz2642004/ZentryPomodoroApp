@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:prj/View/Screens/HomeScreen/HomeScreen.dart';
 import 'package:prj/View/Screens/Tabs%20(%20Screen%20Chooser%20)/BottomNavBar.dart';
 
-class TabsScreen extends ConsumerStatefulWidget {
+class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  ConsumerState<TabsScreen> createState() => _TabsState();
+  State<TabsScreen> createState() => _TabsState();
 }
 
-class _TabsState extends ConsumerState<TabsScreen> {
+class _TabsState extends State<TabsScreen> {
   int _index = 0;
 
   void rebuild(int index) {

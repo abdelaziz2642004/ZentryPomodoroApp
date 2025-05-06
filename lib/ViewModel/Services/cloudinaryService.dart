@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:cloudinary_sdk/cloudinary_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prj/ViewModel/Providers/userProvider.dart';
+
+// will need a whole other cubit just for profile Options :D
 
 class CloudinaryService {
   // I KNOW THIS IS REALLY BAD AND COMPLETELY UNSECURE , but i have no idea what to do
@@ -13,10 +13,10 @@ class CloudinaryService {
   static const String apiSecret = "-LpCQkZjIOyOu2-cSQqE9Qe6HNE";
   static const String uploadPreset = "UsersPics";
 
-  static Future<void> pickAndUploadImage(File pickedFile, WidgetRef ref) async {
+  static Future<String> pickAndUploadImage(File pickedFile) async {
     User? currentUser = FirebaseAuth.instance.currentUser;
 
-    if (currentUser == null) return;
+    if (currentUser == null) return "";
     try {} catch (e) {
       print("image didn't get deleted tho :D :(");
     }
@@ -30,16 +30,17 @@ class CloudinaryService {
             .collection('Users')
             .doc(currentUser.uid)
             .update({'imageUrl': imageUrl});
-
-        ref.invalidate(userProvider);
+        return imageUrl;
         // return imageUrl;
 
         // print("✅ Image uploaded and Firestore updated successfully!");
       } else {
         // print("❌ Image upload failed.");
+        return "";
       }
     } catch (e) {
       // print("❌ Error: $e");
+      return "";
     }
     // return '';
   }

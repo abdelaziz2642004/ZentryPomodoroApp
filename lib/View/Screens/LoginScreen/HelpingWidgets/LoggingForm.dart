@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/View/Screens/LoginScreen/HelpingWidgets/EmailField.dart';
 import 'package:prj/View/Screens/LoginScreen/HelpingWidgets/passwordField.dart';
 import 'package:prj/View/Screens/LoginScreen/HelpingWidgets/signInButton.dart';
+import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
 import 'package:prj/ViewModel/Services/LoginService.dart';
 import 'package:prj/View/Screens/forgotPasswordScreen/forgotScreen.dart';
 import 'package:prj/core/colors.dart';
 
-class LoginForm extends ConsumerStatefulWidget {
+class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
   @override
-  ConsumerState<LoginForm> createState() => _LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends ConsumerState<LoginForm> {
+class _LoginFormState extends State<LoginForm> {
   late final LoginService loginService;
 
   @override
   void initState() {
     super.initState();
-    loginService = LoginService(context: context, rebuild: setState);
+    loginService = LoginService(context: context);
+    BlocProvider.of<AuthCubit>(context).loginService = loginService;
   }
 
   @override
@@ -64,9 +66,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           ),
           const SizedBox(height: 10),
           SignButton(
-            isLoading: loginService.isLoading,
             onPressed: () {
-              loginService.signIn(ref);
+              BlocProvider.of<AuthCubit>(context).login(context);
             },
             type: "In",
           ),

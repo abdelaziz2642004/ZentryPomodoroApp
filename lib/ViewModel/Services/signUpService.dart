@@ -19,23 +19,23 @@ class Signupservice {
   bool obscurePassword1 = true;
   bool obscurePassword2 = true;
   String? _usernameError;
+
+  get usernameError => this._usernameError;
+
+  set usernameError(value) => this._usernameError = value;
   String? _emailError;
   File? _selectedImage;
-  bool _isLoading = false;
 
-  final void Function(void Function()) rebuild; // rebuild the parent widget :D
   final BuildContext context; // show a successful dialog
 
-  Signupservice({required this.rebuild, required this.context});
+  Signupservice({required this.context});
 
   GlobalKey<FormState> get formKey => _formKey;
 
   String get email => _email;
 
-  String? get usernameError => _usernameError;
   String? get emailError => _emailError;
   File? get selectedImage => _selectedImage;
-  bool get isLoading => _isLoading;
 
   Future<String> uploadImageToCloudinary(
     File imageFile,
@@ -83,7 +83,7 @@ class Signupservice {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.asset(
-                    'assets/sent.json',
+                    'assets/JSON/sent.json',
                     width: 300, // Lottie animation
                   ),
                   const SizedBox(height: 20),
@@ -125,8 +125,7 @@ class Signupservice {
     if (_formKey.currentState!.validate()) {
       _emailError = null;
       _usernameError = null;
-      _isLoading = true;
-      rebuild(() {}); // rebuild the parent widget
+      // rebuild the parent widget
 
       // print("I'm here");
 
@@ -138,8 +137,6 @@ class Signupservice {
 
       if (usernameSnapshot.exists) {
         _usernameError = 'Username already exists';
-        _isLoading = false;
-        rebuild(() {}); // rebuild the parent widget
         return;
       }
 
@@ -183,51 +180,40 @@ class Signupservice {
               'id': userCredential.user!.uid,
             });
 
-        rebuild(() {}); // rebuild the parent widget
-        _isLoading = false;
-
         showSuccessPopup();
       } catch (e) {
         if (!context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('An error occurred: ${e.toString()}')),
           );
-          _isLoading = false;
-          rebuild(() {}); // rebuild the parent widget
         }
 
         // send email verification , will still see if I will include this
         // await userCredential.user!.sendEmailVerification();
         // I need to rehost my old website again and it also need flutter blaze
         // obviously there are other solutions for hosting but I don't have time unfortunately
-
-        _isLoading = false;
-        rebuild(() {}); // rebuild the parent widget
       }
     }
   }
 
-  void checkUsername(String userName) async {
-    if (userName.isEmpty) {
-      _usernameError = null; // Clear error
+  // void checkUsername(String userName) async {
+  //   if (userName.isEmpty) {
+  //     _usernameError = null; // Clear error
 
-      rebuild(() {}); // rebuild the parent widget
-      return;
-    }
+  //     return;
+  //   }
 
-    var usernameSnapshot =
-        await FirebaseFirestore.instance
-            .collection('UserNames')
-            .doc(userName)
-            .get();
-    _usernameError = usernameSnapshot.exists ? 'Username already exists' : null;
+  //   var usernameSnapshot =
+  //       await FirebaseFirestore.instance
+  //           .collection('UserNames')
+  //           .doc(userName)
+  //           .get();
+  //   _usernameError = usernameSnapshot.exists ? 'Username already exists' : null;
 
-    rebuild(() {}); // rebuild the parent widget
-
-    if (_usernameError == null) {
-      username = userName;
-    }
-  }
+  //   if (_usernameError == null) {
+  //     username = userName;
+  //   }
+  // }
 
   Future<void> checkEmail(String email) async {
     // Check if the email exists in the Users collection
@@ -238,7 +224,6 @@ class Signupservice {
             .get();
 
     _emailError = emailSnapshot.docs.isNotEmpty ? 'Email already exists' : null;
-    rebuild(() {}); // rebuild the parent widget
 
     if (_emailError == null) {
       _email = email;
@@ -247,6 +232,5 @@ class Signupservice {
 
   void pickImage(File img) {
     _selectedImage = img;
-    rebuild(() {}); // rebuild the parent widget
   }
 }

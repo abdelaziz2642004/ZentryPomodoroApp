@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:prj/ViewModel/Providers/guestModeProvider.dart';
 
 import 'package:prj/View/Screens/SignUpScreen/HelpingWIdgets/SIgnUpForm.dart';
+import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
 import 'package:prj/core/colors.dart';
 
-class SignupScreen extends ConsumerWidget {
+class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -67,7 +67,10 @@ class SignupScreen extends ConsumerWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
-                      ref.read(guestModeProvider.notifier).enableGuestMode();
+                      // ref.read(guestModeProvider.notifier).enableGuestMode();
+                      BlocProvider.of<GuestmodeCubit>(
+                        context,
+                      ).enableGuestMode();
                     },
                     child: const Text(
                       "Continue as guest? ",

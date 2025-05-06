@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/profileAvatar.dart';
 
-class Homescreen extends ConsumerStatefulWidget {
+class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
 
   @override
-  ConsumerState<Homescreen> createState() => _HomescreenState();
+  State<Homescreen> createState() => _HomescreenState();
 }
 
-class _HomescreenState extends ConsumerState<Homescreen> {
+class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

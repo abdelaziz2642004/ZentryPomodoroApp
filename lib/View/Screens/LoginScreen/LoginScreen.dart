@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:prj/ViewModel/Providers/guestModeProvider.dart';
 import 'package:prj/View/Screens/LoginScreen/HelpingWidgets/LoggingForm.dart';
 import 'package:prj/View/Screens/SignUpScreen/signUpScreen.dart';
+import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
+import 'package:prj/core/colors.dart';
 
-class Loginscreen extends ConsumerWidget {
+class Loginscreen extends StatelessWidget {
   const Loginscreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -56,7 +57,7 @@ class Loginscreen extends ConsumerWidget {
                         Text(
                           "Sign Up",
                           style: TextStyle(
-                            color: Color.fromARGB(255, 221, 156, 17),
+                            color: mainColor,
                             fontFamily: "DopisBold",
                           ),
                         ),
@@ -65,12 +66,15 @@ class Loginscreen extends ConsumerWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      ref.read(guestModeProvider.notifier).enableGuestMode();
+                      // ref.read(guestModeProvider.notifier).enableGuestMode();
+                      BlocProvider.of<GuestmodeCubit>(
+                        context,
+                      ).enableGuestMode();
                     },
                     child: const Text(
                       "Continue as guest? ",
                       style: TextStyle(
-                        color: Color.fromARGB(255, 221, 156, 17),
+                        color: mainColor,
                         fontFamily: "DopisBold",
                         fontWeight: FontWeight.bold,
                       ),

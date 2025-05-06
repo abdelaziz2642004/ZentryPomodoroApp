@@ -1,21 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prj/ViewModel/Providers/guestModeProvider.dart';
-import 'package:prj/ViewModel/Providers/userProvider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/View/Screens/ProfileScreen/HelpingWidgets/profileInfo.dart';
 import 'package:prj/View/Screens/ProfileScreen/HelpingWidgets/profileOptions.dart';
 import 'package:prj/View/Screens/ProfileScreen/HelpingWidgets/profilePic.dart';
+import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
 import 'package:prj/core/colors.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   bool isUploading = false;
 
   void setUploadingState(bool value) {
@@ -71,13 +70,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ? null
                           : () async {
                             if (FirebaseAuth.instance.currentUser == null) {
-                              ref
-                                  .watch(guestModeProvider.notifier)
-                                  .disableGuestMode();
+                              // ref
+                              //     .watch(guestModeProvider.notifier)
+                              //     .disableGuestMode();
+                              BlocProvider.of<GuestmodeCubit>(
+                                context,
+                              ).disableGuestMode();
                             } else {
+                              // BlocProvider.of<AuthCubit>(context).logout();
+
                               await FirebaseAuth.instance.signOut();
                             }
-                            ref.invalidate(userProvider);
                             Navigator.pop(context);
                           },
                   style: ElevatedButton.styleFrom(

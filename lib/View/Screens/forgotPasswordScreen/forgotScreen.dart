@@ -85,7 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Lottie.asset('assets/sent.json', height: 160),
+                        Lottie.asset('assets/JSON/sent.json', height: 160),
                         const SizedBox(height: 20),
                         const Text(
                           'An email has been sent successfully!',

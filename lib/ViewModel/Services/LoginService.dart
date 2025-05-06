@@ -1,25 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prj/ViewModel/Providers/userProvider.dart';
+import 'package:prj/Models/User.dart';
 
 class LoginService {
   final formKey = GlobalKey<FormState>();
   String emailOrUsername = '';
   String password = '';
   bool obscurePassword = true;
-  bool isLoading = false;
 
-  final void Function(void Function()) rebuild; // rebuild the parent widget :D
   final BuildContext context; // show a successful dialog
 
-  LoginService({required this.context, required this.rebuild});
+  LoginService({required this.context});
 
-  void signIn(WidgetRef ref) async {
+  Future<void> signIn() async {
     if (formKey.currentState!.validate()) {
-      isLoading = true;
-      rebuild(() {});
       //log in :D
 
       String input = emailOrUsername.trim();
@@ -40,15 +35,11 @@ class LoginService {
           email: input,
           password: password.trim(),
         );
-        isLoading = false;
         // this will happen if logged in successfully
         // ref.invalidate(userProvider);
-        ref.invalidate(userProvider);
       } catch (e) {
         // print(e);
         _showErrorDialog(e.toString());
-        isLoading = false;
-        rebuild(() {});
       }
     }
   }
@@ -71,5 +62,33 @@ class LoginService {
             ],
           ),
     );
+  }
+
+  static Future<FireUser> fetchUserData() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        return FireUser();
+      }
+
+      String FireUserId = currentUser.uid;
+      DocumentSnapshot FireUserDoc =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(FireUserId)
+              .get();
+      if (!FireUserDoc.exists) {
+        return FireUser();
+      }
+      return FireUser(
+        notifications: [],
+        id: FireUserId,
+        email: FireUserDoc['email'] ?? '',
+        ImageUrl: FireUserDoc['imageUrl'] ?? '',
+        fullName: FireUserDoc['fullname'] ?? '',
+      );
+    } catch (e) {
+      throw Exception("Error fetching FireUser: $e");
+    }
   }
 }

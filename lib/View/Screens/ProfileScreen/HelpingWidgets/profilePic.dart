@@ -1,53 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prj/Models/User.dart';
-import 'package:prj/ViewModel/Providers/userProvider.dart';
-import 'package:prj/ViewModel/Services/cloudinaryService.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prj/ViewModel/Cubits/Profile/profile_cubit.dart';
+import 'package:prj/ViewModel/Cubits/Profile/profile_states.dart';
 import 'package:prj/View/Screens/SignUpScreen/HelpingWIdgets/ImagePIcker.dart';
 
-class ProfilePicture extends ConsumerStatefulWidget {
+class ProfilePicture extends StatefulWidget {
   const ProfilePicture({super.key, required this.onUploadStateChanged});
   final void Function(bool) onUploadStateChanged;
 
   @override
-  ConsumerState createState() => _ProfilePictureState();
+  State createState() => _ProfilePictureState();
 }
 
-// async stuff , need to prevent the users from exiting in case of is uploading
-
-class _ProfilePictureState extends ConsumerState<ProfilePicture> {
-  String imageUrl = '';
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    user currentUser = ref.read(userProvider).value ?? user();
-    imageUrl = currentUser.ImageUrl;
-  }
-
+class _ProfilePictureState extends State<ProfilePicture> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        UserImagePicker(
-          onPickImage: (image) async {
-            widget.onUploadStateChanged(
-              true,
-            ); //close the navigation back in the profile screen
-            await CloudinaryService.pickAndUploadImage(image, ref);
-            // after waiting and this is completely done , set it back to false please :D
-            widget.onUploadStateChanged(
-              false,
-            ); //close the navigation back in the profile screen
-
-            //
-            // ref.invalidate(userProvider);
-          },
-          fromProfile: true,
-        ),
-      ],
+    return BlocBuilder<ProfileCubit, ProfileStates>(
+      builder: (context, state) {
+        if (state is ProfileLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is ProfileErrorState) {
+          return const Center(child: Icon(Icons.error, color: Colors.red));
+        }
+        return Stack(
+          children: [
+            UserImagePicker(
+              onPickImage: (image) async {
+                widget.onUploadStateChanged(true); // disable navigation
+                await BlocProvider.of<ProfileCubit>(
+                  context,
+                ).changeImage(image, context);
+                widget.onUploadStateChanged(false); // enable navigation
+              },
+              fromProfile: true,
+            ),
+          ],
+        );
+      },
     );
   }
 }

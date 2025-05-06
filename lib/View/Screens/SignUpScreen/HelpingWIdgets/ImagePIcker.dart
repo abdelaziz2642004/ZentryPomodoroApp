@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:prj/ViewModel/Providers/userProvider.dart';
+import 'package:prj/Models/User.dart';
+import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
 import 'package:prj/core/colors.dart';
 
 class UserImagePicker extends ConsumerStatefulWidget {
@@ -73,11 +75,11 @@ class _UserImagePickerState extends ConsumerState<UserImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).value;
-    final imageUrl = user?.ImageUrl;
+    FireUser user = BlocProvider.of<AuthCubit>(context).user ?? FireUser();
+    final imageUrl = user.ImageUrl;
 
     return GestureDetector(
-      onTap: user!.fullName != 'Guest' ? _pickImage : () {},
+      onTap: user.fullName != 'Guest' ? _pickImage : () {},
       child: Column(
         children: [
           Stack(
