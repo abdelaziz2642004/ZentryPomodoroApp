@@ -67,9 +67,9 @@ class _MyAppState extends State<MyApp> {
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: Lottie.asset('assets/JSON/loading.json'),
-                  );
+                  // return Center(
+                  //   child: Lottie.asset('assets/JSON/loading.json'),
+                  // );
                 }
                 if (snapshot.hasData) {
                   // to refresh with the new data !! :D
