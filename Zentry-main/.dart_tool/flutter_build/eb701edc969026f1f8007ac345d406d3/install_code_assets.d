@@ -1,0 +1,1 @@
+ /home/abdelaziz/Desktop/VirtualStudyRoom/.dart_tool/flutter_build/eb701edc969026f1f8007ac345d406d3/native_assets.json: 
