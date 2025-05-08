@@ -8,9 +8,7 @@ class FireUser {
 
   set fullName(value) => _fullName = value;
   get ImageUrl => _ImageUrl;
-
   set ImageUrl(value) => _ImageUrl = value;
-
   get fullName => _fullName;
 
   final List<myNotification> _notifications;
@@ -19,7 +17,6 @@ class FireUser {
     String? id,
     String? email,
     String? userName,
-
     String? ImageUrl,
     String? fullName,
     List<myNotification>? notifications,
@@ -28,10 +25,17 @@ class FireUser {
        _ImageUrl = ImageUrl ?? '',
        _fullName = fullName ?? 'Guest',
        _notifications = notifications ?? [];
+
   String get id => _id;
   String get email => _email;
-
   List<myNotification> get notifications => _notifications;
-}
 
-enum filters { isSugary, isDairy, isDecaf, containsNuts, containsCaffeine }
+  Map<String, dynamic> toMap() {
+    return {
+      'name': _fullName,
+      'email': _email.trim(),
+      'imageUrl': _ImageUrl,
+      'id': _id,
+    };
+  }
+}
