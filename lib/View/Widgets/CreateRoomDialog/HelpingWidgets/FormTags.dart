@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prj/View/Widgets/HelpingWidgets/CustomContainer.dart';
 
 import '../../../../core/colors.dart';
 import '../CreateRoom.dart';
@@ -17,43 +18,47 @@ class FormTags extends StatefulWidget {
 class _FormTagsState extends State<FormTags> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const FormTextTitle(text: "Tags"),
-        Container(
-          height: 60,
-          child: ListView.builder(
-            itemCount: widget.tagsController.length + 1,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              if (index == widget.tagsController.length) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: grey,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.tagsController.add(TextEditingController());
-                      });
-                    },
-                    icon: Icon(Icons.add, size: 15),
-                  ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        children: [
+          const FormTextTitle(text: "Tags"),
+          Container(
+            height: 60,
+            child: ListView.builder(
+              itemCount: widget.tagsController.length + 1,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                if (index == widget.tagsController.length) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 5),
+                    child: CustomContainer(
+                      hPadding: 12,
+                      color: lightSecondaryColor,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            widget.tagsController.add(TextEditingController());
+                          });
+                        },
+                        child: const Icon(Icons.add, size: 20,),
+                      ),
+                    ),
+                  );
+                }
+                return TagsFormItem(
+                  tagController: widget.tagsController[index],
+                  action: () {
+                    setState(() {
+                      widget.tagsController.removeAt(index);
+                    });
+                  },
                 );
-              }
-              return TagsFormItem(
-                tagController: widget.tagsController[index],
-                action: () {
-                  setState(() {
-                    widget.tagsController.removeAt(index);
-                  });
-                },
-              );
-            },
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
