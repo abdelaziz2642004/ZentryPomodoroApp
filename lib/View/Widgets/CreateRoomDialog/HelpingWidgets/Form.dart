@@ -4,6 +4,8 @@ import '../../HelpingWidgets/CustomContainer.dart';
 import 'Capacity.dart';
 import 'FormTags.dart';
 import 'NumberOfSessions.dart';
+import 'Scheduler.dart';
+
 import 'WorkBreakDurationPicker.dart';
 
 class CreateRoomForm extends StatefulWidget {
@@ -28,7 +30,7 @@ class CreateRoomForm extends StatefulWidget {
 
 class _CreateRoomFormState extends State<CreateRoomForm> {
   Duration workDuration = const Duration(minutes: 50);
-
+  bool isScheduled = false;
   void _incrementCapacity() {
     int current = int.tryParse(widget.capacityController.text) ?? 0;
     if (current < 50) {
@@ -91,6 +93,12 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             decrementCapacity: _decrementCapacity,
           ),
           FormTags(tagsController: widget.tagsController),
+          ScheduleStartEndPicker(
+            isScheduled: isScheduled,
+            onScheduledChanged: (val) {
+              setState(() => isScheduled = val);
+            },
+          ),
         ],
       ),
     );
