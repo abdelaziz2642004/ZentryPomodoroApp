@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prj/View/Widgets/CreateRoomDialog/HelpingWidgets/FormText.dart';
-import 'package:duration_time_picker/duration_time_picker.dart';
-import 'package:prj/core/colors.dart';
-
 import '../../HelpingWidgets/CustomContainer.dart';
+import 'Capacity.dart';
 import 'FormTags.dart';
 import 'NumberOfSessions.dart';
 import 'WorkBreakDurationPicker.dart';
@@ -15,12 +13,14 @@ class CreateRoomForm extends StatefulWidget {
     required this.nameController,
     required this.numberOfSessionsController,
     required this.tagsController,
+    required this.capacityController,
   }) : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
   final TextEditingController nameController;
   final TextEditingController numberOfSessionsController;
   final List<TextEditingController> tagsController;
+  final TextEditingController capacityController;
 
   @override
   State<CreateRoomForm> createState() => _CreateRoomFormState();
@@ -28,6 +28,24 @@ class CreateRoomForm extends StatefulWidget {
 
 class _CreateRoomFormState extends State<CreateRoomForm> {
   Duration workDuration = const Duration(minutes: 50);
+
+  void _incrementCapacity() {
+    int current = int.tryParse(widget.capacityController.text) ?? 0;
+    if (current < 50) {
+      setState(() {
+        widget.capacityController.text = (current + 1).toString();
+      });
+    }
+  }
+
+  void _decrementCapacity() {
+    int current = int.tryParse(widget.capacityController.text) ?? 0;
+    if (current > 1) {
+      setState(() {
+        widget.capacityController.text = (current - 1).toString();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +71,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
           NumberOfSessions(
             numberOfSessionsController: widget.numberOfSessionsController,
           ),
-          FormTags(tagsController: widget.tagsController),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           WorkBreakDurationPicker(
             duration: const Duration(minutes: 50),
             dialogTitle: "Set Work Duration",
@@ -66,6 +83,14 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             dialogTitle: "Set Break Duration",
             text: "Set Break Duration",
           ),
+          const SizedBox(height: 15),
+          const FormTextTitle(text: "Room Capacity"),
+          Capacity(
+            capacityController: widget.capacityController,
+            incrementCapacity: _incrementCapacity,
+            decrementCapacity: _decrementCapacity,
+          ),
+          FormTags(tagsController: widget.tagsController),
         ],
       ),
     );
