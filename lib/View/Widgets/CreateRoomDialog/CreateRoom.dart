@@ -27,23 +27,19 @@ class _CreateRoomState extends State<CreateRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Stack(
-        children: [
-          SizedBox(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-              child: Image.asset("assets/images/CreateRoomBg2.jpg", fit: BoxFit.fitHeight,),
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(16)
             ),
+            child: Image.asset("assets/images/CreateRoomBg2.jpg", fit: BoxFit.cover,),
           ),
-          Padding(
-            padding: const EdgeInsets.all(15),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -74,8 +70,8 @@ class _CreateRoomState extends State<CreateRoom> {
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

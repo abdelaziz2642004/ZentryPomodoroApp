@@ -59,7 +59,7 @@ class _HomescreenState extends State<Homescreen> {
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
-                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
                     builder: (BuildContext context) => CreateRoom(),
                   );
                 },
