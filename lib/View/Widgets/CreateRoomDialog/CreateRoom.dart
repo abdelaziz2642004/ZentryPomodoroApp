@@ -21,61 +21,57 @@ class _CreateRoomState extends State<CreateRoom> {
   final TextEditingController numberOfSessionsController =
       TextEditingController();
   final List<TextEditingController> tagsController = [];
+  final TextEditingController capacityController = TextEditingController(
+    text: '25',
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              'assets/images/CreateRoomBg2.jpg',
-              // make sure this exists in your assets
-              fit: BoxFit.cover,
-              //height: 600,
-              width: double.infinity,
+          SizedBox(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+              child: Image.asset("assets/images/CreateRoomBg2.jpg", fit: BoxFit.fitHeight,),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(15),
-            child: IntrinsicHeight(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 600),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Create Room",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: darkMainColor,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                CreateRoomForm(
+                  formKey: _formKey,
+                  nameController: nameController,
+                  numberOfSessionsController: numberOfSessionsController,
+                  tagsController: tagsController,
+                  capacityController: capacityController,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Create Room",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: darkMainColor,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: CreateRoomForm(
-                          formKey: _formKey,
-                          nameController: nameController,
-                          numberOfSessionsController: numberOfSessionsController,
-                          tagsController: tagsController,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const RoomControl(),
-                        CreateButton(formKey: _formKey),
-                      ],
-                    ),
+                    const RoomControl(),
+                    CreateButton(formKey: _formKey),
                   ],
                 ),
-              ),
+              ],
             ),
           ),
         ],

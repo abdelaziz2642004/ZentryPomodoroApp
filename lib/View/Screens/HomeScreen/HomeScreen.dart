@@ -4,6 +4,7 @@ import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/CustomDrawer.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RecentlyJoined.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RoomsGridBuilder.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/TimeTrackerToday.dart';
+import 'package:prj/core/colors.dart';
 
 import '../../Widgets/CreateRoomDialog/CreateRoom.dart';
 
@@ -56,8 +57,9 @@ class _HomescreenState extends State<Homescreen> {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  showDialog(
+                  showModalBottomSheet(
                     context: context,
+                    isScrollControlled: true,
                     builder: (BuildContext context) => CreateRoom(),
                   );
                 },
