@@ -2,9 +2,13 @@ import 'package:prj/Models/PomodoroRoom.dart';
 
 class RoomStates {}
 
+// Room General states
+
 class RoomInitialState extends RoomStates {}
 
 class RoomLoadingState extends RoomStates {}
+
+// RoomCreation States
 
 class RoomCreationSuccess extends RoomStates {}
 
@@ -12,6 +16,8 @@ class RoomCreationFailure extends RoomStates {
   final String error;
   RoomCreationFailure(this.error);
 }
+
+// RoomJoin States
 
 class RoomJoinSuccess extends RoomStates {
   PomodoroRoom room;
@@ -25,11 +31,22 @@ class RoomJoinFailure extends RoomStates {
 
 class RoomJoinLoadingState extends RoomStates {}
 
-class RoomJoinInitialState extends RoomStates {}
+// RoomLeave States
 
 class RoomLeaveSuccess extends RoomStates {}
 
 class RoomLeaveFailure extends RoomStates {
   final String error;
   RoomLeaveFailure(this.error);
+}
+
+// RoomUpdate States
+class RoomUpdateSuccess extends RoomStates {
+  PomodoroRoom room;
+  RoomUpdateSuccess(this.room);
+}
+
+class RoomUpdateFailure extends RoomStates {
+  final String error;
+  RoomUpdateFailure(this.error);
 }
