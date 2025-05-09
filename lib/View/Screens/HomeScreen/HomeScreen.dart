@@ -5,6 +5,8 @@ import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RecentlyJoined.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RoomsGridBuilder.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/TimeTrackerToday.dart';
 
+import '../../Widgets/CreateRoomDialog/CreateRoom.dart';
+
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
 
@@ -51,6 +53,15 @@ class _HomescreenState extends State<Homescreen> {
                   "Avatar & Creator",
                   style: TextStyle(color: Colors.grey[600]),
                 ),
+              ),
+              FloatingActionButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => CreateRoom(),
+                  );
+                },
+                child: Icon(Icons.add),
               ),
             ],
           ),
