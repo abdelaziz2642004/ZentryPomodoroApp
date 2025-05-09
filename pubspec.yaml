@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.3.0
   uuid: ^4.2.1
   duration_time_picker:
+  intl:
 dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
