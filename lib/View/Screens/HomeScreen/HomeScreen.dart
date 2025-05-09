@@ -1,4 +1,3 @@
-import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/CustomAppBar.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/CustomDrawer.dart';
@@ -14,7 +13,6 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
-  Duration timee = const Duration();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,15 +25,6 @@ class _HomescreenState extends State<Homescreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Timetrackertoday(),
-
-              DurationPicker(
-                duration: timee,
-                onChange: (time) {
-                  setState(() {
-                    timee = time;
-                  });
-                },
-              ),
 
               const SizedBox(height: 24),
 
