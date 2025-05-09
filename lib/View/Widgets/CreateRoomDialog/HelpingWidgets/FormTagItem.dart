@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prj/View/Widgets/HelpingWidgets/CustomContainer.dart';
+import 'package:prj/core/colors.dart';
 
 class TagsFormItem extends StatefulWidget {
   final TextEditingController tagController;
@@ -23,11 +24,6 @@ class _TagsFormItemState extends State<TagsFormItem> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 100),
           child: CustomContainer(
-            // padding: const EdgeInsets.only(left: 8),
-            // decoration: BoxDecoration(
-            //     color: Colors.red,
-            //   borderRadius: BorderRadius.circular(15),
-            // ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
