@@ -10,13 +10,17 @@ class RoomCubit extends Cubit<RoomStates> {
   Future<void> createRoom(PomodoroRoom room) async {
     emit(RoomLoadingState());
     try {
+      print("Creating room with code: ${room.roomCode}");
       await FirebaseFirestore.instance
           .collection('rooms')
           .doc(room.roomCode)
-          .update(room.toMap());
+          .set(room.toMap());
+
+      print("Room created successfully");
 
       emit(RoomCreationSuccess());
     } catch (e) {
+      print("Error creating room: $e");
       emit(RoomCreationFailure(e.toString()));
     }
   }

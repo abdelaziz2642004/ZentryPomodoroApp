@@ -6,6 +6,7 @@ import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_States.dart';
 import 'package:prj/ViewModel/Cubits/Profile/profile_cubit.dart';
 import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
+import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/accountOperations/account_cubit.dart';
 import 'package:prj/View/Screens/LoginScreen/LoginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +23,9 @@ void main() async {
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
         BlocProvider<AccountCubit>(create: (context) => AccountCubit()),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
-
+        BlocProvider<RoomCubit>(
+          create: (context) => RoomCubit(),
+        ), // Uncomment this if you want to use RoomCubit in the main
         // we don't need to provide RoomCubit here when we can just provide it in the screen where we need it only
         // room creation and joining only
       ],
