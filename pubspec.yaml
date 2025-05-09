@@ -54,6 +54,7 @@ dependencies:
   transparent_image: ^2.0.1
   url_launcher: ^6.3.0
   uuid: ^4.2.1
+  duration_picker: ^1.2.0
 dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
