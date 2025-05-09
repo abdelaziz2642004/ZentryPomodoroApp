@@ -19,7 +19,7 @@ class _CreateRoomState extends State<CreateRoom> {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController numberOfSessionsController =
-      TextEditingController();
+      TextEditingController(text: "4");
   final List<TextEditingController> tagsController = [];
   final TextEditingController capacityController = TextEditingController(
     text: '25',
@@ -46,8 +46,8 @@ class _CreateRoomState extends State<CreateRoom> {
                 const Text(
                   "Create Room",
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700,
                     color: darkMainColor,
                   ),
                 ),
@@ -59,7 +59,7 @@ class _CreateRoomState extends State<CreateRoom> {
                   tagsController: tagsController,
                   capacityController: capacityController,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
