@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 import 'package:prj/Models/User.dart';
@@ -34,8 +35,16 @@ class RoomCubit extends Cubit<RoomStates> {
       final doc = await snapshot.get();
 
       if (doc.exists) {
-        // actually join and add the user
+        // ✅ 1. Add user to Firestore (your original logic)
         await snapshot.collection('users').doc(user.id).set(user.toMap());
+
+        // ✅ 2. Add user to Realtime Database for presence tracking
+        final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+          "Rooms/$roomCode/users/${user.id}",
+        );
+
+        await userRef.set(true); // Mark as online
+        await userRef.onDisconnect().remove(); // Auto-remove if disconnected
 
         emit(RoomJoinSuccess(PomodoroRoom.fromDocument(doc)));
         return;
@@ -54,11 +63,15 @@ class RoomCubit extends Cubit<RoomStates> {
           .collection('rooms')
           .doc(roomCode);
       final doc = await snapshot.get();
-      print("iM HERE");
 
       if (doc.exists) {
-        //delete the user from there
         await snapshot.collection('users').doc(user.id).delete();
+
+        // ✅ Clean up Realtime DB too
+        final userRef = FirebaseDatabase.instance.ref(
+          "Rooms/$roomCode/users/${user.id}",
+        );
+        await userRef.remove();
 
         emit(RoomLeaveSuccess());
         return;

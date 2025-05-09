@@ -23,11 +23,7 @@ void main() async {
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
         BlocProvider<AccountCubit>(create: (context) => AccountCubit()),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
-        BlocProvider<RoomCubit>(
-          create: (context) => RoomCubit(),
-        ), // Uncomment this if you want to use RoomCubit in the main
-        // we don't need to provide RoomCubit here when we can just provide it in the screen where we need it only
-        // room creation and joining only
+        BlocProvider<RoomCubit>(create: (context) => RoomCubit()),
       ],
       child: const MyApp(),
     ),

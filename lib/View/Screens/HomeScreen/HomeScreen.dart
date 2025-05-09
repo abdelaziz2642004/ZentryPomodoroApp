@@ -44,7 +44,7 @@ class _HomescreenState extends State<Homescreen> {
                     creatorId: id,
                     availableRoom: true,
                     capacity: 43,
-                    isPublic: true,
+                    isPublic: false,
                     tags: ["test", "room"],
                     joinedUsers: [],
                   );

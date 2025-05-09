@@ -4,7 +4,7 @@ import 'package:prj/Models/PomodoroRoom.dart';
 import 'package:prj/View/Screens/RoomScreen/RoomScreen.dart';
 
 class RoomsGridBuilder extends StatelessWidget {
-  const RoomsGridBuilder({Key? key}) : super(key: key);
+  const RoomsGridBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {
