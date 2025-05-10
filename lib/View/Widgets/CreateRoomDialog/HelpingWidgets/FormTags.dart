@@ -4,7 +4,7 @@ import 'package:prj/View/Widgets/HelpingWidgets/CustomContainer.dart';
 import '../../../../core/colors.dart';
 import '../CreateRoom.dart';
 import 'FormTagItem.dart';
-import 'FormText.dart';
+import '../../HelpingWidgets/FormTextTitle.dart';
 
 class FormTags extends StatefulWidget {
   FormTags({super.key, required this.tagsController});
@@ -30,6 +30,7 @@ class _FormTagsState extends State<FormTags> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 if (index == widget.tagsController.length) {
+                  if (widget.tagsController.length >= 5) return null;
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 5),
                     child: CustomContainer(

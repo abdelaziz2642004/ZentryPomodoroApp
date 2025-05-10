@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:prj/View/Widgets/CreateRoomDialog/HelpingWidgets/FormText.dart';
+import 'package:prj/View/Widgets/HelpingWidgets/FormTextTitle.dart';
 import 'package:prj/View/Widgets/HelpingWidgets/CustomContainer.dart';
 import 'package:prj/core/colors.dart';
 
