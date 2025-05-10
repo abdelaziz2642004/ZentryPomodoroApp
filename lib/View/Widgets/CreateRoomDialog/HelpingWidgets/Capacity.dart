@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prj/View/Widgets/HelpingWidgets/CustomContainer.dart';
 
 import 'CapacityButton.dart';
-import 'CustomTextFormField.dart';
+import '../../HelpingWidgets/CustomTextFormField.dart';
 
 class Capacity extends StatelessWidget {
   final TextEditingController capacityController;
@@ -32,7 +32,21 @@ class Capacity extends StatelessWidget {
             child: CustomContainer(
               child: CustomTextFormField(
                 controller: capacityController,
-                validator: () {},
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "*Required";
+                  }
+
+                  final intValue = int.tryParse(value);
+                  if (intValue == null) {
+                    return "not valid";
+                  }
+
+                  if (intValue > 50) {
+                    return "should be <= 50";
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
               ),

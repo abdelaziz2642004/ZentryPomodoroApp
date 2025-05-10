@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:prj/View/Widgets/CreateRoomDialog/HelpingWidgets/FormText.dart';
-import '../../HelpingWidgets/CustomContainer.dart';
+import 'package:prj/View/Widgets/HelpingWidgets/FormTextTitle.dart';
 import 'Capacity.dart';
+import 'CreateButton.dart';
 import 'FormTags.dart';
 import 'NumberOfSessions.dart';
+import 'RoomControl.dart';
+import 'RoomName.dart';
 import 'Scheduler.dart';
 
 import 'WorkBreakDurationPicker.dart';
@@ -55,20 +57,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
       key: widget._formKey,
       child: Column(
         children: [
-          CustomContainer(
-            child: TextFormField(
-              controller: widget.nameController,
-              validator:
-                  (value) =>
-                      value == null || value.isEmpty
-                          ? "Room name required"
-                          : null,
-              decoration: const InputDecoration(
-                labelText: "Room Name",
-                border: InputBorder.none,
-              ),
-            ),
-          ),
+          RoomName(widget: widget),
           const SizedBox(height: 16),
           NumberOfSessions(
             numberOfSessionsController: widget.numberOfSessionsController,
@@ -98,6 +87,14 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             onScheduledChanged: (val) {
               setState(() => isScheduled = val);
             },
+          ),
+          const SizedBox(height: 25),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const RoomControl(),
+              CreateButton(formKey: widget._formKey),
+            ],
           ),
         ],
       ),

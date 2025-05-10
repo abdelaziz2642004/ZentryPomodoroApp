@@ -63,14 +63,6 @@ class _CreateRoomState extends State<CreateRoom> {
                     tagsController: tagsController,
                     capacityController: capacityController,
                   ),
-                  const SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const RoomControl(),
-                      CreateButton(formKey: _formKey),
-                    ],
-                  ),
                 ],
               ),
             ),

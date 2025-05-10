@@ -20,7 +20,7 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      validator: (value) {validator();},
+      validator: (value) => validator(value),
       decoration: const InputDecoration(
         border: InputBorder.none,
       ),

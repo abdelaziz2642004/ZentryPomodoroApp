@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/colors.dart';
 import '../../HelpingWidgets/CustomContainer.dart';
-import 'FormText.dart';
+import '../../HelpingWidgets/FormTextTitle.dart';
 
 class WorkBreakDurationPicker extends StatefulWidget {
   Duration duration;

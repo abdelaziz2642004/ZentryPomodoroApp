@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../HelpingWidgets/CustomContainer.dart';
-import 'CustomTextFormField.dart';
-import 'FormText.dart';
+import '../../HelpingWidgets/CustomTextFormField.dart';
+import '../../HelpingWidgets/FormTextTitle.dart';
 
 class NumberOfSessions extends StatelessWidget {
   const NumberOfSessions({
@@ -26,7 +26,21 @@ class NumberOfSessions extends StatelessWidget {
             child: CustomTextFormField(
               controller:
               numberOfSessionsController,
-              validator: () {},
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "*Required";
+                }
+
+                final intValue = int.tryParse(value);
+                if (intValue == null) {
+                  return "not valid";
+                }
+
+                if (intValue > 15) {
+                  return "should be <= 15";
+                }
+                return null;
+              },
               keyboardType: TextInputType.number,
                 textAlign: TextAlign.center
             ),
