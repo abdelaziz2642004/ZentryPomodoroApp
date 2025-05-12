@@ -7,6 +7,8 @@ import 'package:prj/ViewModel/Cubits/accountOperations/account_cubit.dart';
 import 'package:prj/View/Screens/LoginScreen/LoginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'View/Screens/SplashScreen.dart';
+import 'ViewModel/Cubits/Room/create_room_cubit.dart';
+import 'core/get_it.dart';
 
 // test commit
 // takii test commit
@@ -16,7 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // most important 2 lines for firebase
-
+  setUpLocator();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -24,6 +26,7 @@ void main() async {
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
         BlocProvider<AccountCubit>(create: (context) => AccountCubit()),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
+        BlocProvider<CreateRoomCubit>(create: (_) => getIt<CreateRoomCubit>()),
       ],
       child: const MyApp(),
     ),
@@ -39,6 +42,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Widget screen = Container();
+
   @override
   void initState() {
     super.initState();

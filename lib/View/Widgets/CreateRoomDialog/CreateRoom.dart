@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/colors.dart';
-import '../HelpingWidgets/CustomContainer.dart';
-import 'HelpingWidgets/CreateButton.dart';
 import 'HelpingWidgets/Form.dart';
-import 'HelpingWidgets/FormTags.dart';
-import 'HelpingWidgets/NumberOfSessions.dart';
-import 'HelpingWidgets/RoomControl.dart';
 
 class CreateRoom extends StatefulWidget {
   const CreateRoom({super.key});
@@ -15,16 +10,6 @@ class CreateRoom extends StatefulWidget {
 }
 
 class _CreateRoomState extends State<CreateRoom> {
-  final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController numberOfSessionsController =
-      TextEditingController(text: "4");
-  final List<TextEditingController> tagsController = [];
-  final TextEditingController capacityController = TextEditingController(
-    text: '25',
-  );
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,11 +42,6 @@ class _CreateRoomState extends State<CreateRoom> {
                   ),
                   const SizedBox(height: 20),
                   CreateRoomForm(
-                    formKey: _formKey,
-                    nameController: nameController,
-                    numberOfSessionsController: numberOfSessionsController,
-                    tagsController: tagsController,
-                    capacityController: capacityController,
                   ),
                 ],
               ),

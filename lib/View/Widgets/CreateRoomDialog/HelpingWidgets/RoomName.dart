@@ -7,16 +7,14 @@ import 'Form.dart';
 class RoomName extends StatelessWidget {
   const RoomName({
     super.key,
-    required this.widget,
+    required this.nameController,
   });
-
-  final CreateRoomForm widget;
-
+  final TextEditingController nameController;
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
       child: TextFormField(
-        controller: widget.nameController,
+        controller: nameController,
         validator:
             (value){
               if (value == null || value.isEmpty) {
