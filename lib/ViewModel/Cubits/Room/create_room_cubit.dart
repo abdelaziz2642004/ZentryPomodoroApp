@@ -12,11 +12,15 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
   CreateRoomCubit(this.roomRepository) : super(CreateRoomInitial());
 
   Future<void> createRoom({
-    required PomodoroRoom room
+    required PomodoroRoom? room
   }) async {
     emit(CreateRoomLoading());
 
     try {
+      if(room == null ){
+        throw("Not Valid input");
+      }
+
       await roomRepository.createRoom(room);
 
       emit(CreateRoomSuccess());

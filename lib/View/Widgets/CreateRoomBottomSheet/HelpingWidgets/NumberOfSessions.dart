@@ -36,6 +36,10 @@ class NumberOfSessions extends StatelessWidget {
                   return "not valid";
                 }
 
+                if (intValue <= 0) {
+                  return "should be > 0";
+                }
+
                 if (intValue > 15) {
                   return "should be <= 15";
                 }
