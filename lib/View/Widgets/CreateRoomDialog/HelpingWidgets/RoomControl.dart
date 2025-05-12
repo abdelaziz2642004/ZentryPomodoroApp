@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:prj/core/colors.dart';
 
-class RoomControl extends StatefulWidget {
-  const RoomControl({super.key});
+class RoomControl extends StatelessWidget {
+  final bool isPrivate;
+  final VoidCallback onToggle;
 
-  @override
-  _RoomControlState createState() => _RoomControlState();
-}
-
-class _RoomControlState extends State<RoomControl> {
-  bool isPrivate = false;
+  const RoomControl({
+    super.key,
+    required this.isPrivate,
+    required this.onToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isPrivate = !isPrivate;
-        });
-      },
+      onTap: onToggle,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         decoration: BoxDecoration(
@@ -28,10 +24,7 @@ class _RoomControlState extends State<RoomControl> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              isPrivate ? Icons.lock : Icons.lock_open,
-              color: white,
-            ),
+            Icon(isPrivate ? Icons.lock : Icons.lock_open, color: white),
             const SizedBox(width: 8),
             Text(
               isPrivate ? "Private" : "Public",
