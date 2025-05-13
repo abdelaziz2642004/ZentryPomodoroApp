@@ -13,11 +13,11 @@ class CapacityButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: CustomContainer(
-        color: secondaryColor,
-        hPadding: 3,
-        child: GestureDetector(
-          onTap: onTap,
+      child: GestureDetector(
+        onTap: onTap,
+        child: CustomContainer(
+          color: secondaryColor,
+          hPadding: 3,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(icon, color: white),
