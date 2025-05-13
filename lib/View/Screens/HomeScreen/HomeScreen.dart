@@ -54,19 +54,19 @@ class _HomescreenState extends State<Homescreen> {
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (BuildContext context) => CreateRoom(),
-                  );
-                },
-                child: Icon(Icons.add),
-              ),
             ],
           ),
         ),
+      ),
+      floatingActionButton:  FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (BuildContext context) => CreateRoom(),
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
