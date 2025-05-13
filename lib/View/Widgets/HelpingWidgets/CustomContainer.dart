@@ -8,6 +8,8 @@ class CustomContainer extends StatelessWidget {
   final Color color;
   final double hPadding;
   final double vPadding;
+  double? width;
+  double? height;
 
   CustomContainer({
     super.key,
@@ -15,11 +17,15 @@ class CustomContainer extends StatelessWidget {
     this.hPadding = 6,
     this.vPadding = 2,
     this.color = light,
+    this.width,
+    this.height
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),
