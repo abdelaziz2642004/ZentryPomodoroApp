@@ -11,14 +11,12 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
 
   CreateRoomCubit(this.roomRepository) : super(CreateRoomInitial());
 
-  Future<void> createRoom({
-    required PomodoroRoom? room
-  }) async {
+  Future<void> createRoom({required PomodoroRoom? room}) async {
     emit(CreateRoomLoading());
 
     try {
-      if(room == null ){
-        throw("Not Valid input");
+      if (room == null) {
+        throw ("Not Valid input");
       }
 
       await roomRepository.createRoom(room);
@@ -27,5 +25,8 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
     } catch (e) {
       emit(CreateRoomFailure(e.toString()));
     }
+  }
+  void updateWorkDuration(int value){
+
   }
 }

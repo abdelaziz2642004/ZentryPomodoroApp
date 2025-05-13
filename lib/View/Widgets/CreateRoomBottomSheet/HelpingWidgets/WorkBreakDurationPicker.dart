@@ -11,7 +11,7 @@ class WorkBreakDurationPicker extends StatefulWidget {
   int limit;
   String text;
   String dialogTitle;
-  VoidCallback setDuration;
+  final Function(int) onDurationSelected;
 
   WorkBreakDurationPicker({
     super.key,
@@ -19,7 +19,7 @@ class WorkBreakDurationPicker extends StatefulWidget {
     required this.limit,
     required this.dialogTitle,
     required this.text,
-    required this.setDuration,
+    required this.onDurationSelected,
   });
 
   @override
@@ -29,11 +29,13 @@ class WorkBreakDurationPicker extends StatefulWidget {
 
 class _WorkBreakDurationPickerState extends State<WorkBreakDurationPicker> {
   List<int> durations = [];
+  late int selectedDuration;
 
   @override
   void initState() {
     super.initState();
     durations = List<int>.generate(widget.limit, (i) => i + 1);
+    selectedDuration = widget.duration;
   }
 
   @override
@@ -49,59 +51,55 @@ class _WorkBreakDurationPickerState extends State<WorkBreakDurationPicker> {
               onTap: () {
                 showDialog(
                   context: context,
-                  builder:
-                      (context) => AlertDialog(
-                        backgroundColor: lightSecondaryColor,
-
-                        title: FormTextTitle(
-                          text: widget.dialogTitle,
-                          color: mainColor,
-                          shadow: light,
-                        ),
-                        content: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.35,
-
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.3,
-                                child: CupertinoPicker(
-                                  scrollController: FixedExtentScrollController(
-                                    initialItem: widget.duration,
-                                  ),
-                                  itemExtent: 35,
-                                  onSelectedItemChanged: (int value) {
-                                    setState(() {
-                                      widget.duration = durations[value];
-                                    });
-                                  },
-                                  children:
-                                      durations
-                                          .map(
-                                            (int min) =>
-                                                Center(child: Text("$min")),
-                                          )
-                                          .toList(),
-                                ),
+                  builder: (context) => AlertDialog(
+                    backgroundColor: lightSecondaryColor,
+                    title: FormTextTitle(
+                      text: widget.dialogTitle,
+                      color: mainColor,
+                      fontSize: 25,
+                      shadow: light,
+                    ),
+                    content: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            child: CupertinoPicker(
+                              scrollController: FixedExtentScrollController(
+                                initialItem: durations.indexOf(widget.duration),
                               ),
-                              CustomButton(
-                                bgColor: mainColor,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                onTap: widget.setDuration,
-                                content: const Text(
-                                  "Set",
-                                  style: TextStyle(
-                                    color: lightSecondaryColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500
-                                  ),
-                                ),
-                              ),
-                            ],
+                              itemExtent: 35,
+                              onSelectedItemChanged: (int index) {
+                                setState(() {
+                                  selectedDuration = durations[index];
+                                });
+                              },
+                              children: durations
+                                  .map((min) => Center(child: Text("$min")))
+                                  .toList(),
+                            ),
                           ),
-                        ),
+                          CustomButton(
+                            bgColor: mainColor,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            onTap: () {
+                              widget.onDurationSelected(selectedDuration);
+                              Navigator.pop(context);
+                            },
+                            content: const Text(
+                              "Set",
+                              style: TextStyle(
+                                color: lightSecondaryColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                  ),
                 );
               },
               child: Row(
