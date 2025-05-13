@@ -76,8 +76,10 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
     return BlocListener<CreateRoomCubit, CreateRoomState>(
       listener: (context, state) {
         if (state is CreateRoomFailure) {
+          ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(FailedSnackBar());
         } else if (state is CreateRoomSuccess) {
+          ScaffoldMessenger.of(context).clearSnackBars();
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(SuccessSnackBar());
         }
@@ -164,6 +166,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                       );
                       context.read<CreateRoomCubit>().createRoom(room: room);
                     } else {
+                      ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(
                         context,
                       ).showSnackBar(FailedSnackBar());

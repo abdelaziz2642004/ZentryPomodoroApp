@@ -21,7 +21,7 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
       DateTime createdAt = room.createdAt.toDate();
       DateTime scheduleTime = room.scheduleTime.toDate();
 
-      if (createdAt.isAfter(scheduleTime)) {
+      if (room.isScheduled && createdAt.isAfter(scheduleTime)) {
         throw ("Scheduler must be AFTER created time");
       }
       await roomRepository.createRoom(room);
