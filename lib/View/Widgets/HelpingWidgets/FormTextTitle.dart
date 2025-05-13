@@ -7,6 +7,7 @@ class FormTextTitle extends StatelessWidget {
   final FontWeight fontWeight;
   final Color color;
   final Color shadow;
+  final double fontSize;
 
   const FormTextTitle({
     super.key,
@@ -14,6 +15,7 @@ class FormTextTitle extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.color = white,
     this.shadow = darkMainColor,
+    this.fontSize = 16
   });
 
   @override
@@ -24,7 +26,7 @@ class FormTextTitle extends StatelessWidget {
         text,
         style: TextStyle(
           fontWeight: fontWeight,
-          fontSize: 16,
+          fontSize: fontSize,
           color: color,
           shadows: [
             Shadow(color: shadow, blurRadius: 3, offset: const Offset(1, 2)),

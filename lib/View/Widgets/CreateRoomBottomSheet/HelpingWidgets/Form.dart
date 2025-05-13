@@ -14,7 +14,6 @@ import 'RoomControl.dart';
 import 'RoomName.dart';
 import 'Scheduler.dart';
 import 'WorkBreakDurationPicker.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class CreateRoomForm extends StatefulWidget {
   CreateRoomForm({super.key});
@@ -35,8 +34,8 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
   );
   bool isPrivate = false;
 
-  Duration workDuration = const Duration(minutes: 50);
-  Duration breakDuration = const Duration(minutes: 10);
+  int workDuration = 50;
+  int breakDuration = 10;
   bool isScheduled = false;
 
   void _incrementCapacity() {
@@ -90,17 +89,27 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             ),
             const SizedBox(height: 15),
             WorkBreakDurationPicker(
-              duration: 50,
+              duration: workDuration,
               limit: 180,
               dialogTitle: "Set Work Duration",
-              text: "Set Work Duration", setDuration: () {  },
+              text: "Set Work Duration",
+              onDurationSelected: (int value) {
+                setState(() {
+                  workDuration = value;
+                });
+              },
             ),
             const SizedBox(height: 15),
             WorkBreakDurationPicker(
-              duration: 10,
+              duration: breakDuration,
               limit: 60,
               dialogTitle: "Set Break Duration",
-              text: "Set Break Duration", setDuration: () {  },
+              text: "Set Break Duration",
+              onDurationSelected: (int value) {
+                setState(() {
+                  breakDuration = value;
+                });
+              },
             ),
             const SizedBox(height: 15),
             const FormTextTitle(text: "Room Capacity"),
@@ -137,8 +146,8 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                         availableRoom: true,
                         name: nameController.text,
                         capacity: int.parse(capacityController.text),
-                        workDuration: workDuration.inMinutes,
-                        breakDuration: breakDuration.inMinutes,
+                        workDuration: workDuration,
+                        breakDuration: breakDuration,
                         isPublic: !isPrivate,
                         totalSessions: int.parse(
                           numberOfSessionsController.text,
@@ -146,9 +155,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                         tags: tagsController.map((e) => e.text).toList(),
                         joinedUsers: [],
                       );
-                      context.read<CreateRoomCubit>().createRoom(
-                        room: room,
-                      );
+                      context.read<CreateRoomCubit>().createRoom(room: room);
                     } else {
                       ScaffoldMessenger.of(
                         context,

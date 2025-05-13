@@ -8,15 +8,24 @@ class CustomButton extends StatelessWidget {
   double? width;
   double? height;
 
-  CustomButton({super.key, required this.onTap, required this.content, required this.bgColor, this.width, this.height});
+  CustomButton({
+    super.key,
+    required this.onTap,
+    required this.content,
+    required this.bgColor,
+    this.width,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return CustomContainer(
-      color: bgColor,
-      vPadding: 8,
-      width: width,
-      child: GestureDetector(onTap: onTap, child: content),
+    return GestureDetector(
+      onTap: onTap,
+      child: CustomContainer(
+        color: bgColor,
+        width: width,
+        vPadding: 8, child: content
+      ),
     );
   }
 }

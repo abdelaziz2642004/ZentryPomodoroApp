@@ -41,8 +41,7 @@ class _CreateRoomState extends State<CreateRoom> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CreateRoomForm(
-                  ),
+                  CreateRoomForm(),
                 ],
               ),
             ),
