@@ -3,15 +3,18 @@ import 'package:intl/intl.dart';
 import 'package:prj/View/Widgets/HelpingWidgets/FormTextTitle.dart';
 import 'package:prj/View/Widgets/HelpingWidgets/CustomContainer.dart';
 import 'package:prj/core/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScheduleStartEndPicker extends StatefulWidget {
   final bool isScheduled;
   final ValueChanged<bool> onScheduledChanged;
+  final Function(Timestamp) onScheduleTimeSelected;
 
   const ScheduleStartEndPicker({
     super.key,
     required this.isScheduled,
     required this.onScheduledChanged,
+    required this.onScheduleTimeSelected,
   });
 
   @override
@@ -19,10 +22,9 @@ class ScheduleStartEndPicker extends StatefulWidget {
 }
 
 class _ScheduleStartEndPickerState extends State<ScheduleStartEndPicker> {
-  DateTime? startDateTime;
-  DateTime? endDateTime;
+  DateTime? scheduleTime;
 
-  Future<void> _pickDateTime({required bool isStart}) async {
+  Future<void> _pickDateTime() async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -46,12 +48,10 @@ class _ScheduleStartEndPickerState extends State<ScheduleStartEndPicker> {
         );
 
         setState(() {
-          if (isStart) {
-            startDateTime = selected;
-          } else {
-            endDateTime = selected;
-          }
+          scheduleTime = selected;
         });
+        Timestamp timestamp = Timestamp.fromDate(selected);
+        widget.onScheduleTimeSelected(timestamp);
       }
     }
   }
@@ -82,26 +82,26 @@ class _ScheduleStartEndPickerState extends State<ScheduleStartEndPicker> {
               const SizedBox(width: 12),
               Expanded(
                 flex: 2,
-                child: CustomContainer(
-                  hPadding: 12,
-                  vPadding: 10,
-                  color: widget.isScheduled ? light : lightGrey,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (widget.isScheduled) {
-                        _pickDateTime(isStart: true);
-                      }
-                    },
+                child: GestureDetector(
+                  onTap: () {
+                    if (widget.isScheduled) {
+                      _pickDateTime();
+                    }
+                  },
+                  child: CustomContainer(
+                    hPadding: 12,
+                    vPadding: 10,
+                    color: widget.isScheduled ? light : lightGrey,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FormTextTitle(
                           text:
-                              startDateTime == null
+                              scheduleTime == null
                                   ? "Select date"
                                   : DateFormat(
                                     'dd/MM/yyyy @hh:mm a',
-                                  ).format(startDateTime!),
+                                  ).format(scheduleTime!),
 
                           color: widget.isScheduled ? darkMainColor : grey,
                           fontWeight: FontWeight.w500,

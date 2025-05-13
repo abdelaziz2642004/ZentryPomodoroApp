@@ -14,6 +14,8 @@ import 'RoomControl.dart';
 import 'RoomName.dart';
 import 'Scheduler.dart';
 import 'WorkBreakDurationPicker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class CreateRoomForm extends StatefulWidget {
   CreateRoomForm({super.key});
@@ -36,7 +38,9 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
 
   int workDuration = 50;
   int breakDuration = 10;
+
   bool isScheduled = false;
+  Timestamp scheduleTime = Timestamp.now();
 
   void _incrementCapacity() {
     int current = int.tryParse(capacityController.text) ?? 0;
@@ -121,9 +125,12 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
             FormTags(tagsController: tagsController),
             ScheduleStartEndPicker(
               isScheduled: isScheduled,
-              onScheduledChanged: (val) {
-                setState(() => isScheduled = val);
+              onScheduledChanged: (value) {
+                setState(() => isScheduled = value);
               },
+              onScheduleTimeSelected:(value){
+                  scheduleTime = value;
+              }
             ),
             const SizedBox(height: 25),
             Row(
@@ -141,7 +148,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final room = PomodoroRoom(
-                        creatorId: "creatorId",
+                        creatorId: FirebaseAuth.instance.currentUser!.uid,
                         createdAt: Timestamp.now(),
                         availableRoom: true,
                         name: nameController.text,
@@ -153,7 +160,7 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                           numberOfSessionsController.text,
                         ),
                         tags: tagsController.map((e) => e.text).toList(),
-                        joinedUsers: [],
+                        joinedUsers: [], isScheduled: isScheduled, scheduleTime: scheduleTime,
                       );
                       context.read<CreateRoomCubit>().createRoom(room: room);
                     } else {

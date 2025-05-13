@@ -18,7 +18,12 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
       if (room == null) {
         throw ("Not Valid input");
       }
+      DateTime createdAt = room.createdAt.toDate();
+      DateTime scheduleTime = room.scheduleTime.toDate();
 
+      if (createdAt.isAfter(scheduleTime)) {
+        throw ("Scheduler must be AFTER created time");
+      }
       await roomRepository.createRoom(room);
 
       emit(CreateRoomSuccess());
@@ -26,7 +31,6 @@ class CreateRoomCubit extends Cubit<CreateRoomState> {
       emit(CreateRoomFailure(e.toString()));
     }
   }
-  void updateWorkDuration(int value){
 
-  }
+  void updateWorkDuration(int value) {}
 }
