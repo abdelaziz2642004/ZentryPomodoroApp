@@ -40,6 +40,8 @@ class RoomsGridBuilder extends StatelessWidget {
         }
 
         return GridView.builder(
+          physics:
+              const NeverScrollableScrollPhysics(), // disable GridView's scroll :DDDDDD
           shrinkWrap: true,
           itemCount: publicRooms.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
