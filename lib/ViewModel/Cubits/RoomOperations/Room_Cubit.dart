@@ -12,12 +12,22 @@ class RoomCubit extends Cubit<RoomStates> {
     emit(RoomLoadingState());
     try {
       print("Creating room with code: ${room.roomCode}");
+
+      // Save room to Firestore
       await FirebaseFirestore.instance
           .collection('rooms')
           .doc(room.roomCode)
           .set(room.toMap());
 
-      print("Room created successfully");
+      // Save room to Realtime Database
+      final DatabaseReference roomRef = FirebaseDatabase.instance.ref(
+        "Rooms/${room.roomCode}",
+      );
+      await roomRef.set(room.toMapRealTimeDB());
+
+      print(
+        "Room created successfully in both Firestore and Realtime Database",
+      );
 
       emit(RoomCreationSuccess());
     } catch (e) {
@@ -29,25 +39,26 @@ class RoomCubit extends Cubit<RoomStates> {
   Future<void> joinRoom(String roomCode, FireUser user) async {
     emit(RoomJoinLoadingState());
     try {
-      final snapshot = FirebaseFirestore.instance
-          .collection('rooms')
-          .doc(roomCode);
-      final doc = await snapshot.get();
+      final DatabaseReference roomRef = FirebaseDatabase.instance.ref(
+        "Rooms/$roomCode",
+      );
+      final DataSnapshot roomSnapshot = await roomRef.get();
 
-      if (doc.exists) {
-        // ✅ 1. Add user to Firestore (your original logic)
-        await snapshot.collection('users').doc(user.id).set(user.toMap());
+      if (roomSnapshot.exists) {
+        final DatabaseReference userRef = roomRef.child("users/${user.id}");
 
-        // ✅ 2. Add user to Realtime Database for presence tracking
-        final DatabaseReference userRef = FirebaseDatabase.instance.ref(
-          "Rooms/$roomCode/users/${user.id}",
+        await userRef.set(true); // user is now in the room
+        await userRef
+            .onDisconnect() // lw el net 2t3 aw 7aga
+            .remove();
+
+        final roomData = roomSnapshot.value as Map<dynamic, dynamic>;
+        final PomodoroRoom room = PomodoroRoom.fromRealtimeMap(
+          roomCode,
+          roomData,
         );
 
-        await userRef.set(true); // Mark as online
-        await userRef.onDisconnect().remove(); // Auto-remove if disconnected
-
-        emit(RoomJoinSuccess(PomodoroRoom.fromDocument(doc)));
-        return;
+        emit(RoomJoinSuccess(room));
       } else {
         emit(RoomJoinFailure("Room does not exist"));
       }
@@ -59,26 +70,18 @@ class RoomCubit extends Cubit<RoomStates> {
   Future<void> leaveRoom(String roomCode, FireUser user) async {
     emit(RoomJoinLoadingState());
     try {
-      final snapshot = FirebaseFirestore.instance
-          .collection('rooms')
-          .doc(roomCode);
-      final doc = await snapshot.get();
+      // Reference to the user's entry in the Realtime Database
+      final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+        "Rooms/$roomCode/users/${user.id}",
+      );
 
-      if (doc.exists) {
-        await snapshot.collection('users').doc(user.id).delete();
+      // Remove the user from the room
+      await userRef.remove();
 
-        // ✅ Clean up Realtime DB too
-        final userRef = FirebaseDatabase.instance.ref(
-          "Rooms/$roomCode/users/${user.id}",
-        );
-        await userRef.remove();
-
-        emit(RoomLeaveSuccess());
-        return;
-      } else {
-        emit(RoomLeaveFailure("Couldn't leave the room"));
-      }
+      // Emit success state
+      emit(RoomLeaveSuccess());
     } catch (e) {
+      // Emit failure state if an error occurs
       emit(RoomLeaveFailure(e.toString()));
     }
   }
@@ -87,6 +90,9 @@ class RoomCubit extends Cubit<RoomStates> {
     PomodoroRoom room,
     List<String> newJoinedUsers,
   ) async {
+    if (room.joinedUsers == newJoinedUsers) {
+      return; // no change in the users
+    }
     room.joinedUsers = newJoinedUsers;
     emit(
       RoomJoinSuccess(room),
