@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 import 'package:prj/View/Screens/RoomScreen/RoomScreen.dart';
 
@@ -8,8 +8,8 @@ class RoomsGridBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('rooms').snapshots(),
+    return StreamBuilder<DatabaseEvent>(
+      stream: FirebaseDatabase.instance.ref("Rooms").onValue,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -17,14 +17,21 @@ class RoomsGridBuilder extends StatelessWidget {
         if (snapshot.hasError) {
           return Center(child: Text("Error: ${snapshot.error}"));
         }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
           return const Center(child: Text("No public rooms available."));
         }
 
-        // Filter rooms where isPublic == true
+        // Parse the data from Realtime Database
+        final Map<dynamic, dynamic> roomsMap =
+            snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+
+        // Convert the map to a list of PomodoroRoom objects
         final publicRooms =
-            snapshot.data!.docs
-                .map((doc) => PomodoroRoom.fromDocument(doc))
+            roomsMap.entries
+                .map(
+                  (entry) =>
+                      PomodoroRoom.fromRealtimeMap(entry.key, entry.value),
+                )
                 .where((room) => room.isPublic)
                 .toList();
 

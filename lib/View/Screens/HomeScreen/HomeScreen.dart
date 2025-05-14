@@ -36,7 +36,7 @@ class _HomescreenState extends State<Homescreen> {
                   final id = BlocProvider.of<AuthCubit>(context).user!.id;
                   PomodoroRoom room = PomodoroRoom(
                     // roomCode: "123456", // it will be created wit uuid
-                    name: "Test Room",
+                    name: "bgrbbbb",
                     workDuration: 1,
                     breakDuration: 5,
                     totalSessions: 4,
@@ -44,7 +44,7 @@ class _HomescreenState extends State<Homescreen> {
                     creatorId: id,
                     availableRoom: true,
                     capacity: 43,
-                    isPublic: false,
+                    isPublic: true,
                     tags: ["test", "room"],
                     joinedUsers: [],
                   );

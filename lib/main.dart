@@ -12,6 +12,18 @@ import 'package:prj/View/Screens/LoginScreen/LoginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'View/Screens/SplashScreen.dart';
 
+// I want if the user joins a room then disconnets from the internet
+// and then reconnects to the internet, the app should show the room screen right away
+// and not the login screen or TabsScreen
+// so we will handle this part here
+// in the realtime DB u will have a users collection and inside each user will have the room he is in
+// when is disconnected from the internet we will set the room to null
+// and when he reconnects we will check if the room is null or not
+// if it is not null we will navigate to the room screen with that roomcode ( call the join room function and navigator.push roomscreen )
+// and add the user also to the room in the realtime DB too
+// and if the room is null we will navigate to the login screen
+// and if the user is not logged in we will navigate to the login screen right away
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

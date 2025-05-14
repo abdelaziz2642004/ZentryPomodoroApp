@@ -52,22 +52,21 @@ class PomodoroRoom {
        this.tags = tags,
        this.joinedUsers = joinedUsers;
 
-  factory PomodoroRoom.fromDocument(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory PomodoroRoom.fromRealtimeMap(
+    String roomcode,
+    Map<dynamic, dynamic> data,
+  ) {
     return PomodoroRoom(
-      roomCode: doc.id,
+      roomCode: roomcode,
       creatorId: data['creatorId'] ?? '',
-      createdAt: data['createdAt'] ?? Timestamp.now(),
+      createdAt: Timestamp.fromMillisecondsSinceEpoch(data['createdAt'] ?? 0),
       availableRoom: data['availableRoom'] ?? true,
       name: data['name'] ?? '',
       capacity: data['capacity'] ?? 0,
-      // workPhase: data['workPhase'] ?? true,
-      // // phaseStartTime: data['phaseStartTime'] ?? Timestamp.now(),
       workDuration: data['workDuration'] ?? 25,
       breakDuration: data['breakDuration'] ?? 5,
       isPublic: data['Public'] ?? true,
       totalSessions: data['numberOfSessions'] ?? 0,
-      // passedSessions: data['passedSessions'] ?? 0,
       tags: List<String>.from(data['tags'] ?? []),
       joinedUsers: List<String>.from(data['joinedUsers'] ?? []),
     );
@@ -78,6 +77,25 @@ class PomodoroRoom {
       'roomCode': _roomCode,
       'creatorId': _creatorId,
       'createdAt': _createdAt,
+      'availableRoom': _availableRoom,
+      'name': _name,
+      'capacity': _capacity,
+      // 'workPhase': _workPhase,
+      'workDuration': _workDuration,
+      'breakDuration': _breakDuration,
+      'Public': isPublic,
+      'numberOfSessions': _totalSessions,
+      // 'passedSessions': _passedSessions,
+      'tags': tags,
+      'joinedUsers': joinedUsers,
+    };
+  }
+
+  Map<String, dynamic> toMapRealTimeDB() {
+    return {
+      'roomCode': _roomCode,
+      'creatorId': _creatorId,
+      'createdAt': _createdAt.millisecondsSinceEpoch,
       'availableRoom': _availableRoom,
       'name': _name,
       'capacity': _capacity,
