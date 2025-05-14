@@ -52,6 +52,21 @@ class RoomCubit extends Cubit<RoomStates> {
             .onDisconnect() // lw el net 2t3 aw 7aga
             .remove();
 
+        // Add joined room to Realtime Database under users/{userID}/joinedroom
+        final DatabaseReference userDbRef = FirebaseDatabase.instance.ref(
+          "users/${user.id}",
+        );
+
+        // Set the recently joined room in Realtime Database (persistent)
+        await userDbRef.child("recently").set(roomCode);
+
+        // Set the joined room in Realtime Database (disconnectable)
+        await userDbRef.child("joinedroom").set(roomCode);
+        await userDbRef
+            .child("joinedroom")
+            .onDisconnect()
+            .remove(); // Remove on disconnect
+
         final roomData = roomSnapshot.value as Map<dynamic, dynamic>;
         final PomodoroRoom room = PomodoroRoom.fromRealtimeMap(
           roomCode,
