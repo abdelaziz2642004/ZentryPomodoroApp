@@ -55,13 +55,6 @@ class RoomCubit extends Cubit<RoomStates> {
     try {
       print("Creating room with code: ${room.roomCode}");
 
-      // Save room to Firestore
-      await FirebaseFirestore.instance
-          .collection('rooms')
-          .doc(room.roomCode)
-          .set(room.toMap());
-
-      // Save room to Realtime Database
       final DatabaseReference roomRef = FirebaseDatabase.instance.ref(
         "Rooms/${room.roomCode}",
       );
