@@ -7,6 +7,7 @@ import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/CustomDrawer.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RecentlyJoined.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RoomsGridBuilder.dart';
 import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/TimeTrackerToday.dart';
+import 'package:prj/View/Screens/RoomScreen/RoomScreen.dart';
 import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
 import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
 
@@ -18,6 +19,29 @@ class Homescreen extends StatefulWidget {
 }
 
 class _HomescreenState extends State<Homescreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkIfUserShouldJoin();
+  }
+
+  Future<void> _checkIfUserShouldJoin() async {
+    final user = BlocProvider.of<AuthCubit>(context).user;
+
+    if (user != null) {
+      final roomCode = await BlocProvider.of<RoomCubit>(context).atStart(user);
+
+      if (roomCode != "") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RoomScreen(roomCode: roomCode),
+          ), // Make sure RoomsScreen exists
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +59,6 @@ class _HomescreenState extends State<Homescreen> {
                 onPressed: () async {
                   final id = BlocProvider.of<AuthCubit>(context).user!.id;
                   PomodoroRoom room = PomodoroRoom(
-                    // roomCode: "123456", // it will be created wit uuid
                     name: "bgrbbbb",
                     workDuration: 1,
                     breakDuration: 5,
@@ -54,24 +77,19 @@ class _HomescreenState extends State<Homescreen> {
               ),
 
               const SizedBox(height: 24),
-
               const Text(
                 "Recently Joined",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               const Recentlyjoined(),
-
               const SizedBox(height: 24),
-
-              // Rooms Grid
               const Text(
                 "Public Rooms",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               const RoomsGridBuilder(),
-
               const SizedBox(height: 24),
               Center(
                 child: Text(

@@ -3,7 +3,6 @@ import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prj/core/colors.dart';
 
-import 'LoginScreen/LoginScreen.dart';
 //restore?
 
 class SplashScreen extends StatelessWidget {
