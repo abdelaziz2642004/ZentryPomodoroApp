@@ -10,6 +10,46 @@ class RoomCubit extends Cubit<RoomStates> {
 
   PomodoroRoom? recently;
 
+  Future<String> atStart(FireUser user) async {
+    emit(RoomJoinLoadingState());
+
+    try {
+      final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+        "users/${user.id}",
+      );
+
+      final DataSnapshot joinedSnapshot =
+          await userRef.child("joinedroom").get();
+      final DataSnapshot recentSnapshot = await userRef.child("recently").get();
+
+      if (recentSnapshot.exists) {
+        final String recentRoomCode = recentSnapshot.value as String;
+
+        final DatabaseReference recentRoomRef = FirebaseDatabase.instance.ref(
+          "Rooms/$recentRoomCode",
+        );
+        final DataSnapshot recentRoomSnap = await recentRoomRef.get();
+
+        if (recentRoomSnap.exists) {
+          final roomData = recentRoomSnap.value as Map<dynamic, dynamic>;
+          recently = PomodoroRoom.fromRealtimeMap(recentRoomCode, roomData);
+        }
+      }
+
+      if (joinedSnapshot.exists) {
+        final String roomCode = joinedSnapshot.value as String;
+
+        return roomCode; // yes there was a room :D
+      } else {
+        emit(RoomInitialState()); // not in a room currently
+        return "";
+      }
+    } catch (e) {
+      emit(RoomJoinFailure("Error during startup: ${e.toString()}"));
+      return "";
+    }
+  }
+
   Future<void> createRoom(PomodoroRoom room) async {
     emit(RoomLoadingState());
     try {
@@ -81,46 +121,6 @@ class RoomCubit extends Cubit<RoomStates> {
       }
     } catch (e) {
       emit(RoomJoinFailure(e.toString()));
-    }
-  }
-
-  Future<String> atStart(FireUser user) async {
-    emit(RoomJoinLoadingState());
-
-    try {
-      final DatabaseReference userRef = FirebaseDatabase.instance.ref(
-        "users/${user.id}",
-      );
-
-      final DataSnapshot joinedSnapshot =
-          await userRef.child("joinedroom").get();
-      final DataSnapshot recentSnapshot = await userRef.child("recently").get();
-
-      if (recentSnapshot.exists) {
-        final String recentRoomCode = recentSnapshot.value as String;
-
-        final DatabaseReference recentRoomRef = FirebaseDatabase.instance.ref(
-          "Rooms/$recentRoomCode",
-        );
-        final DataSnapshot recentRoomSnap = await recentRoomRef.get();
-
-        if (recentRoomSnap.exists) {
-          final roomData = recentRoomSnap.value as Map<dynamic, dynamic>;
-          recently = PomodoroRoom.fromRealtimeMap(recentRoomCode, roomData);
-        }
-      }
-
-      if (joinedSnapshot.exists) {
-        final String roomCode = joinedSnapshot.value as String;
-
-        return roomCode; // yes there was a room :D
-      } else {
-        emit(RoomInitialState()); // not in a room currently
-        return "";
-      }
-    } catch (e) {
-      emit(RoomJoinFailure("Error during startup: ${e.toString()}"));
-      return "";
     }
   }
 
