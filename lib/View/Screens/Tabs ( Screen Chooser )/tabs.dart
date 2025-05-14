@@ -31,8 +31,8 @@ class _TabsState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // FirebaseAuth.instance.signOut();
     Widget buildScreen = _buildScreenChooser(_index, rebuild);
+
     return SafeArea(
       child: Scaffold(
         body: buildScreen,

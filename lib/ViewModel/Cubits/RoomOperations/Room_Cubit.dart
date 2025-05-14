@@ -8,6 +8,8 @@ import 'package:prj/ViewModel/Cubits/RoomOperations/Room_States.dart';
 class RoomCubit extends Cubit<RoomStates> {
   RoomCubit() : super(RoomInitialState());
 
+  PomodoroRoom? recently;
+
   Future<void> createRoom(PomodoroRoom room) async {
     emit(RoomLoadingState());
     try {
@@ -82,6 +84,46 @@ class RoomCubit extends Cubit<RoomStates> {
     }
   }
 
+  Future<String> atStart(FireUser user) async {
+    emit(RoomJoinLoadingState());
+
+    try {
+      final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+        "users/${user.id}",
+      );
+
+      final DataSnapshot joinedSnapshot =
+          await userRef.child("joinedroom").get();
+      final DataSnapshot recentSnapshot = await userRef.child("recently").get();
+
+      if (recentSnapshot.exists) {
+        final String recentRoomCode = recentSnapshot.value as String;
+
+        final DatabaseReference recentRoomRef = FirebaseDatabase.instance.ref(
+          "Rooms/$recentRoomCode",
+        );
+        final DataSnapshot recentRoomSnap = await recentRoomRef.get();
+
+        if (recentRoomSnap.exists) {
+          final roomData = recentRoomSnap.value as Map<dynamic, dynamic>;
+          recently = PomodoroRoom.fromRealtimeMap(recentRoomCode, roomData);
+        }
+      }
+
+      if (joinedSnapshot.exists) {
+        final String roomCode = joinedSnapshot.value as String;
+
+        return roomCode; // yes there was a room :D
+      } else {
+        emit(RoomInitialState()); // not in a room currently
+        return "";
+      }
+    } catch (e) {
+      emit(RoomJoinFailure("Error during startup: ${e.toString()}"));
+      return "";
+    }
+  }
+
   Future<void> leaveRoom(String roomCode, FireUser user) async {
     emit(RoomJoinLoadingState());
     try {
@@ -92,6 +134,12 @@ class RoomCubit extends Cubit<RoomStates> {
 
       // Remove the user from the room
       await userRef.remove();
+
+      final DatabaseReference userRef2 = FirebaseDatabase.instance.ref(
+        "users/${user.id}",
+      );
+
+      userRef2.child("joinedroom").remove();
 
       // Emit success state
       emit(RoomLeaveSuccess());
