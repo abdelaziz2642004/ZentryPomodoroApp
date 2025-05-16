@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prj/Models/User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class LoginService {
   final formKey = GlobalKey<FormState>();
@@ -18,7 +20,10 @@ class LoginService {
       //log in :D
 
       String input = emailOrUsername.trim();
+
       try {
+        String id = "";
+
         if (!input.contains('@')) {
           final snapshot =
               await FirebaseFirestore.instance
@@ -28,6 +33,7 @@ class LoginService {
 
           if (snapshot.exists) {
             input = snapshot.data()!['email'];
+            id = snapshot.data()!['id'];
           }
         }
 
@@ -35,6 +41,16 @@ class LoginService {
           email: input,
           password: password.trim(),
         );
+
+        final String sessionID = const Uuid().v4();
+
+        FirebaseFirestore.instance.collection("Users").doc(id).update({
+          'SessionID': sessionID,
+        });
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("SessionID", sessionID);
+
         // this will happen if logged in successfully
         // ref.invalidate(userProvider);
       } catch (e) {
@@ -78,6 +94,14 @@ class LoginService {
               .doc(FireUserId)
               .get();
       if (!FireUserDoc.exists) {
+        return FireUser();
+      }
+      String sessionID = FireUserDoc['SessionID'];
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      final oldSessionID = prefs.getString('SessionID');
+      if (oldSessionID != sessionID) {
+        await FirebaseAuth.instance.signOut();
         return FireUser();
       }
       return FireUser(

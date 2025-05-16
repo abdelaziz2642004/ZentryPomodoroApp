@@ -52,7 +52,7 @@ class _HomescreenState extends State<Homescreen> {
         child: BlocBuilder<RoomCubit, RoomStates>(
           builder: (context, state) {
             if (state is RoomJoinLoadingState) {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             }
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
