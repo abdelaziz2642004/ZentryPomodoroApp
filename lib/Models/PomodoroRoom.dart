@@ -5,6 +5,9 @@ class PomodoroRoom {
   final String _roomCode;
   final String _creatorId;
   /////////////////////////////
+
+  /////////////////////////////
+
   final Timestamp _createdAt;
   int _workDuration;
   int _breakDuration;
@@ -20,6 +23,11 @@ class PomodoroRoom {
   bool isPublic;
   List<String> tags;
   List<String> joinedUsers = [];
+
+  //
+
+  bool isScheduled;
+  Timestamp scheduleTime;
 
   PomodoroRoom({
     String? roomCode,
@@ -37,6 +45,8 @@ class PomodoroRoom {
     // required int passedSessions,
     required List<String> tags,
     required List<String> joinedUsers,
+    required this.isScheduled,
+    required this.scheduleTime,
   }) : _roomCode = roomCode ?? const Uuid().v4(),
        _creatorId = creatorId,
        _createdAt = createdAt,
@@ -69,6 +79,54 @@ class PomodoroRoom {
       totalSessions: data['numberOfSessions'] ?? 0,
       tags: List<String>.from(data['tags'] ?? []),
       joinedUsers: List<String>.from(data['joinedUsers'] ?? []),
+      isScheduled: data['isScheduled'],
+      scheduleTime: Timestamp.fromMillisecondsSinceEpoch(
+        data['scheduleTime'] ?? 0,
+      ),
+    );
+  }
+
+  // required bool isScheduled,
+  // Timestamp? scheduleTime
+  // })
+  // : _roomCode = roomCode ?? const Uuid().v4(),
+  //       _creatorId = creatorId,
+  //       _createdAt = createdAt,
+  //       _availableRoom = availableRoom,
+  //       _name = name,
+  //       _capacity = capacity,
+  // //  _workPhase = workPhase,
+  //       _workDuration = workDuration,
+  //       _breakDuration = breakDuration,
+  //       this.isPublic = isPublic,
+  //       _totalSessions = totalSessions,
+  // // //  _passedSessions = passedSessions,
+  //       this.tags = tags,
+  //       this.joinedUsers = joinedUsers,
+  //       this.isScheduled = isScheduled,
+  //       this.scheduleTime = scheduleTime ?? Timestamp.now();
+
+  factory PomodoroRoom.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return PomodoroRoom(
+      roomCode: doc.id,
+      creatorId: data['creatorId'] ?? '',
+      createdAt: data['createdAt'] ?? Timestamp.now(),
+      availableRoom: data['availableRoom'] ?? true,
+      name: data['name'] ?? '',
+      capacity: data['capacity'] ?? 0,
+      // workPhase: data['workPhase'] ?? true,
+      // // phaseStartTime: data['phaseStartTime'] ?? Timestamp.now(),
+      workDuration: data['workDuration'] ?? 25,
+      breakDuration: data['breakDuration'] ?? 5,
+      isPublic: data['Public'] ?? true,
+      totalSessions: data['numberOfSessions'] ?? 0,
+      // passedSessions: data['passedSessions'] ?? 0,
+      tags: List<String>.from(data['tags'] ?? []),
+      joinedUsers: List<String>.from(data['joinedUsers'] ?? []),
+
+      isScheduled: data['isScheduled'] ?? false,
+      scheduleTime: data['scheduleTime'] ?? Timestamp.now(),
     );
   }
 
@@ -107,6 +165,8 @@ class PomodoroRoom {
       // 'passedSessions': _passedSessions,
       'tags': tags,
       'joinedUsers': joinedUsers,
+      'isScheduled': isScheduled,
+      'scheduleTime': scheduleTime,
     };
   }
 
@@ -132,6 +192,7 @@ class PomodoroRoom {
   set workDuration(int value) => _workDuration = value;
   set breakDuration(int value) => _breakDuration = value;
   set totalSessions(int value) => _totalSessions = value;
+  // // set passedSessions(int value) => _passedSessions = value;
   // // set passedSessions(int value) => _passedSessions = value;
 }
 
