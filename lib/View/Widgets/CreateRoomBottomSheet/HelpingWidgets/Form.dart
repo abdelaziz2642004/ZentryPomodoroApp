@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 import 'package:prj/View/Widgets/HelpingWidgets/FormTextTitle.dart';
-import '../../../../ViewModel/Cubits/Room/create_room_cubit.dart';
+import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
+import 'package:prj/ViewModel/Cubits/RoomOperations/Room_States.dart';
 import '../../../../core/SnackBars/FailedSnackBar.dart';
 import '../../../../core/SnackBars/SuccessSnackBar.dart';
 import 'Capacity.dart';
@@ -15,7 +16,6 @@ import 'RoomName.dart';
 import 'Scheduler.dart';
 import 'WorkBreakDurationPicker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 
 class CreateRoomForm extends StatefulWidget {
   CreateRoomForm({super.key});
@@ -73,12 +73,14 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateRoomCubit, CreateRoomState>(
+    return BlocListener<RoomCubit, RoomStates>(
       listener: (context, state) {
-        if (state is CreateRoomFailure) {
+        if (state is RoomCreationFailure) {
+          // print("${state.error}");
+
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(FailedSnackBar());
-        } else if (state is CreateRoomSuccess) {
+        } else if (state is RoomCreationSuccess) {
           ScaffoldMessenger.of(context).clearSnackBars();
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(SuccessSnackBar());
@@ -130,9 +132,9 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
               onScheduledChanged: (value) {
                 setState(() => isScheduled = value);
               },
-              onScheduleTimeSelected:(value){
-                  scheduleTime = value;
-              }
+              onScheduleTimeSelected: (value) {
+                scheduleTime = value;
+              },
             ),
             const SizedBox(height: 25),
             Row(
@@ -148,6 +150,8 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                 ),
                 CreateButton(
                   onPressed: () {
+                    // print("herehereherehereherehereherehereherehere");
+
                     if (_formKey.currentState!.validate()) {
                       final room = PomodoroRoom(
                         creatorId: FirebaseAuth.instance.currentUser!.uid,
@@ -162,14 +166,18 @@ class _CreateRoomFormState extends State<CreateRoomForm> {
                           numberOfSessionsController.text,
                         ),
                         tags: tagsController.map((e) => e.text).toList(),
-                        joinedUsers: [], isScheduled: isScheduled, scheduleTime: scheduleTime,
+                        joinedUsers: [],
+                        isScheduled: isScheduled,
+                        scheduleTime: scheduleTime,
                       );
-                      context.read<CreateRoomCubit>().createRoom(room: room);
+                      // print("herehereherehereherehereherehereherehere");
+
+                      context.read<RoomCubit>().createRoom(room);
                     } else {
                       ScaffoldMessenger.of(context).clearSnackBars();
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(FailedSnackBar());
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        FailedSnackBar(msg: "fill all the fields please :D"),
+                      );
                     }
                   },
                 ),

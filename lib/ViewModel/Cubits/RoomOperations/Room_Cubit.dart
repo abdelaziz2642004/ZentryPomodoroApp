@@ -1,14 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 import 'package:prj/Models/User.dart';
 import 'package:prj/ViewModel/Cubits/RoomOperations/Room_States.dart';
+import 'package:prj/ViewModel/Repositories/room_repository.dart';
 
 class RoomCubit extends Cubit<RoomStates> {
-  RoomCubit() : super(RoomInitialState());
-
+  RoomCubit(this.roomRepository) : super(RoomInitialState());
   PomodoroRoom? recently;
+  final RoomRepository roomRepository;
 
   Future<String> atStart(FireUser user) async {
     emit(RoomJoinLoadingState());
@@ -39,9 +39,9 @@ class RoomCubit extends Cubit<RoomStates> {
       if (joinedSnapshot.exists) {
         final String roomCode = joinedSnapshot.value as String;
 
-        return roomCode; // yes there was a room :D
+        return roomCode;
       } else {
-        emit(RoomInitialState()); // not in a room currently
+        emit(RoomInitialState());
         return "";
       }
     } catch (e) {
@@ -51,19 +51,15 @@ class RoomCubit extends Cubit<RoomStates> {
   }
 
   Future<void> createRoom(PomodoroRoom room) async {
-    emit(RoomLoadingState());
+    emit(RoomCreatingLoadingState());
     try {
-      print("Creating room with code: ${room.roomCode}");
+      DateTime createdAt = room.createdAt.toDate();
+      DateTime scheduleTime = room.scheduleTime.toDate();
 
-      final DatabaseReference roomRef = FirebaseDatabase.instance.ref(
-        "Rooms/${room.roomCode}",
-      );
-      await roomRef.set(room.toMapRealTimeDB());
-
-      print(
-        "Room created successfully in both Firestore and Realtime Database",
-      );
-
+      if (room.isScheduled && createdAt.isAfter(scheduleTime)) {
+        throw ("Scheduler must be AFTER created time");
+      }
+      await roomRepository.createRoom(room);
       emit(RoomCreationSuccess());
     } catch (e) {
       print("Error creating room: $e");
@@ -71,68 +67,23 @@ class RoomCubit extends Cubit<RoomStates> {
     }
   }
 
-  Future<void> joinRoom(String roomCode, FireUser user) async {
+  Future<void> joinRoom(String roomCode) async {
     emit(RoomJoinLoadingState());
     try {
-      final DatabaseReference roomRef = FirebaseDatabase.instance.ref(
-        "Rooms/$roomCode",
-      );
-      final DataSnapshot roomSnapshot = await roomRef.get();
-
-      if (roomSnapshot.exists) {
-        final DatabaseReference userRef = roomRef.child("users/${user.id}");
-
-        await userRef.set(true); // user is now in the room
-        await userRef
-            .onDisconnect() // lw el net 2t3 aw 7aga
-            .remove();
-
-        // Add joined room to Realtime Database under users/{userID}/joinedroom
-        final DatabaseReference userDbRef = FirebaseDatabase.instance.ref(
-          "users/${user.id}",
-        );
-
-        // Set the recently joined room in Realtime Database (persistent)
-        await userDbRef.child("recently").set(roomCode);
-
-        // Set the joined room in Realtime Database (disconnectable)
-        await userDbRef.child("joinedroom").set(roomCode);
-        await userDbRef
-            .child("joinedroom")
-            .onDisconnect()
-            .remove(); // Remove on disconnect
-
-        final roomData = roomSnapshot.value as Map<dynamic, dynamic>;
-        final PomodoroRoom room = PomodoroRoom.fromRealtimeMap(
-          roomCode,
-          roomData,
-        );
-
-        emit(RoomJoinSuccess(room));
-      } else {
-        emit(RoomJoinFailure("Room does not exist"));
-      }
+      final room = await roomRepository.joinRoom(roomCode);
+      recently = room;
+      emit(RecentlyUpdated());
+      if (room == null) return;
+      emit(RoomJoinSuccess(room));
     } catch (e) {
       emit(RoomJoinFailure(e.toString()));
     }
   }
 
-  Future<void> leaveRoom(String roomCode, FireUser user) async {
+  Future<void> leaveRoom(String roomCode) async {
     emit(RoomJoinLoadingState());
     try {
-      // Reference to the user's entry in the Realtime Database
-      final DatabaseReference userRef = FirebaseDatabase.instance.ref(
-        "Rooms/$roomCode/users/${user.id}",
-      );
-
-      // Remove the user from the room
-      await userRef.remove();
-
-      final DatabaseReference userRef2 = FirebaseDatabase.instance.ref(
-        "users/${user.id}",
-      );
-
-      userRef2.child("joinedroom").remove();
+      await roomRepository.leaveRoom(roomCode);
 
       // Emit success state
       emit(RoomLeaveSuccess());

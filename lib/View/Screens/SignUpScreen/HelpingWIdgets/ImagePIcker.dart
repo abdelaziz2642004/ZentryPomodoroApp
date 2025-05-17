@@ -76,6 +76,8 @@ class _UserImagePickerState extends ConsumerState<UserImagePicker> {
   @override
   Widget build(BuildContext context) {
     FireUser user = BlocProvider.of<AuthCubit>(context).user ?? FireUser();
+
+    print(user.fullName);
     final imageUrl = user.ImageUrl;
 
     return GestureDetector(

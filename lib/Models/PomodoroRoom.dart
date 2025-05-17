@@ -62,6 +62,9 @@ class PomodoroRoom {
        this.tags = tags,
        this.joinedUsers = joinedUsers;
 
+  // attribute names from the database
+  //collection names and docs
+
   factory PomodoroRoom.fromRealtimeMap(
     String roomcode,
     Map<dynamic, dynamic> data,
@@ -79,7 +82,7 @@ class PomodoroRoom {
       totalSessions: data['numberOfSessions'] ?? 0,
       tags: List<String>.from(data['tags'] ?? []),
       joinedUsers: List<String>.from(data['joinedUsers'] ?? []),
-      isScheduled: data['isScheduled'],
+      isScheduled: data['isScheduled'] ?? false,
       scheduleTime: Timestamp.fromMillisecondsSinceEpoch(
         data['scheduleTime'] ?? 0,
       ),
@@ -166,7 +169,7 @@ class PomodoroRoom {
       'tags': tags,
       'joinedUsers': joinedUsers,
       'isScheduled': isScheduled,
-      'scheduleTime': scheduleTime,
+      'scheduleTime': scheduleTime.millisecondsSinceEpoch,
     };
   }
 

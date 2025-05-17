@@ -42,9 +42,7 @@ Future<bool> leaveroom(BuildContext context, String roomCode) async {
   );
 
   if (shouldLeave == true) {
-    // Perform the leave room logic
-    final currentUser = BlocProvider.of<AuthCubit>(context).user;
-    await BlocProvider.of<RoomCubit>(context).leaveRoom(roomCode, currentUser!);
+    await BlocProvider.of<RoomCubit>(context).leaveRoom(roomCode);
     Navigator.pop(context);
     return true; // Leave the room
     // Navigate back

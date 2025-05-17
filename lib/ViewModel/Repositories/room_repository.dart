@@ -10,4 +10,12 @@ class RoomRepository {
   Future<void> createRoom(PomodoroRoom room) {
     return _roomService.createRoom(room);
   }
+
+  Future<PomodoroRoom?> joinRoom(String roomcode) {
+    return _roomService.joinRoom(roomcode);
+  }
+
+  Future<void> leaveRoom(String roomCode) {
+    return _roomService.leaveRoom(roomCode);
+  }
 }

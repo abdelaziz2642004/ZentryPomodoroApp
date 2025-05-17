@@ -19,8 +19,9 @@ class _RoomScreenState extends State<RoomScreen> {
   @override
   void initState() {
     super.initState();
-    final currentUser = BlocProvider.of<AuthCubit>(context).user;
-    BlocProvider.of<RoomCubit>(context).joinRoom(widget.roomCode, currentUser!);
+    // final currentUser = BlocProvider.of<AuthCubit>(context).user;
+
+    BlocProvider.of<RoomCubit>(context).joinRoom(widget.roomCode);
   }
 
   @override

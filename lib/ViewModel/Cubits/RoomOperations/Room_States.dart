@@ -1,4 +1,5 @@
 import 'package:prj/Models/PomodoroRoom.dart';
+import 'package:prj/View/Screens/HomeScreen/HelpingWidgets/RecentlyJoined.dart';
 
 class RoomStates {}
 
@@ -16,6 +17,8 @@ class RoomCreationFailure extends RoomStates {
   final String error;
   RoomCreationFailure(this.error);
 }
+
+class RoomCreatingLoadingState extends RoomStates {}
 
 // RoomJoin States
 
@@ -50,3 +53,5 @@ class RoomUpdateFailure extends RoomStates {
   final String error;
   RoomUpdateFailure(this.error);
 }
+
+class RecentlyUpdated extends RoomStates {}

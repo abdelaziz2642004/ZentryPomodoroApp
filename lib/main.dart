@@ -6,7 +6,6 @@ import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_States.dart';
 import 'package:prj/ViewModel/Cubits/Profile/profile_cubit.dart';
 import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
-import 'package:prj/ViewModel/Cubits/Room/create_room_cubit.dart';
 import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/accountOperations/account_cubit.dart';
 import 'package:prj/View/Screens/LoginScreen/LoginScreen.dart';
@@ -38,8 +37,7 @@ void main() async {
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
         BlocProvider<AccountCubit>(create: (context) => AccountCubit()),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
-        BlocProvider<CreateRoomCubit>(create: (_) => getIt<CreateRoomCubit>()),
-        BlocProvider<RoomCubit>(create: (context) => RoomCubit()),
+        BlocProvider<RoomCubit>(create: (context) => getIt<RoomCubit>()),
       ],
       child: const MyApp(),
     ),
