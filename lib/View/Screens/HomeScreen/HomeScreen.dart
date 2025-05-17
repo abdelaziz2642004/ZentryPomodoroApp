@@ -53,45 +53,23 @@ class _HomescreenState extends State<Homescreen> {
       appBar: Customappbar.build(),
       body: SafeArea(
         child: BlocBuilder<RoomCubit, RoomStates>(
+          buildWhen: (previous, current) {
+            // Return true only for the specific states you want to rebuild for
+            return current is RoomLoadingState || current is RoomInitialState;
+          },
           builder: (context, state) {
-            if (state is RoomJoinLoadingState) {
+            print(state is RoomLoadingState);
+            if (state is RoomLoadingState) {
               return const Center(child: CircularProgressIndicator());
             }
+
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Timetrackertoday(),
-
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     final id = BlocProvider.of<AuthCubit>(context).user!.id;
-                  //     PomodoroRoom room = PomodoroRoom(
-                  //       name: "bgrbbbb",
-                  //       workDuration: 1,
-                  //       breakDuration: 5,
-                  //       totalSessions: 4,
-                  //       createdAt: Timestamp.now(),
-                  //       creatorId: id,
-                  //       availableRoom: true,
-                  //       capacity: 43,
-                  //       isPublic: true,
-                  //       tags: ["test", "room"],
-                  //       joinedUsers: [],
-                  //     );
-                  //     await BlocProvider.of<RoomCubit>(
-                  //       context,
-                  //     ).createRoom(room);
-                  //   },
-                  //   child: const Text("Create Random Test Room"),
-                  // ),
                   const SizedBox(height: 24),
-                  const Text(
-                    "Recently Joined",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
                   const Recentlyjoined(),
                   const SizedBox(height: 24),
                   const Text(

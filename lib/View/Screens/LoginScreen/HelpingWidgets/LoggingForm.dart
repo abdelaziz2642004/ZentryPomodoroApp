@@ -22,7 +22,7 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     super.initState();
     loginService = LoginService(context: context);
-    BlocProvider.of<AuthCubit>(context).loginService = loginService;
+    BlocProvider.of<AuthCubit>(context).authRepo.loginService = loginService;
   }
 
   @override

@@ -32,11 +32,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           listener: (context, state) async {
             if (state is accountLoadingState) {
               setState(() {
-                _isLoading = true; // Set loading state to true
+                _isLoading = true;
               });
             } else {
               setState(() {
-                _isLoading = false; // Reset loading state
+                _isLoading = false;
               });
             }
 

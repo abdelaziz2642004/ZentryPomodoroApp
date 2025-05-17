@@ -13,8 +13,17 @@ class Joineduserspart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RoomCubit, RoomStates>(
+      buildWhen: (previous, current) {
+        // Return true only for the specific states you want to rebuild for
+        return current is RoomJoinSuccess ||
+            current is RoomJoinFailure ||
+            current is RoomJoinLoadingState;
+      },
+
       builder: (context, state) {
-        if (state is RoomJoinSuccess) {
+        if (state is RoomJoinLoadingState) {
+          return const CircularProgressIndicator();
+        } else if (state is RoomJoinSuccess) {
           final roomDetails = state.room;
           return StreamBuilder<DatabaseEvent>(
             stream:

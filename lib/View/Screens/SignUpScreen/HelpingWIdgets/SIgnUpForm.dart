@@ -23,7 +23,7 @@ class _SignupFormState extends State<SignupForm> {
   void initState() {
     super.initState();
     signupservice = Signupservice(context: context);
-    BlocProvider.of<AuthCubit>(context).signupService = signupservice;
+    BlocProvider.of<AuthCubit>(context).authRepo.signupservice = signupservice;
   }
 
   @override
@@ -157,7 +157,7 @@ class _SignupFormState extends State<SignupForm> {
 
           SignButton(
             onPressed: () {
-              BlocProvider.of<AuthCubit>(context).signUp(context);
+              BlocProvider.of<AuthCubit>(context).signUp();
             },
             type: "Up",
           ),

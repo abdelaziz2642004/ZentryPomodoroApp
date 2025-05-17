@@ -39,6 +39,7 @@ class ProfileAvatar extends StatelessWidget {
                 authState is AuthInitialState) {
               FireUser currentUser =
                   BlocProvider.of<AuthCubit>(context).user ?? FireUser();
+              print(currentUser.email);
 
               return PopupMenuButton(
                 itemBuilder:

@@ -12,6 +12,12 @@ class CreateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RoomCubit, RoomStates>(
+      buildWhen: (previous, current) {
+        // Return true only for the specific states you want to rebuild for
+        return current is RoomCreatingLoadingState ||
+            current is RoomCreationFailure ||
+            current is RoomCreationSuccess;
+      },
       builder: (context, state) {
         final isLoading = state is RoomCreatingLoadingState;
         return Align(

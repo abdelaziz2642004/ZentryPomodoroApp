@@ -17,7 +17,7 @@ void showErrorDialog(String message, BuildContext context) {
                 fit: BoxFit.cover,
               ),
               const SizedBox(height: 16),
-              Text(message),
+              // Text(message),
             ],
           ),
           actions: [

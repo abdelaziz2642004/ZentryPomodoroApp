@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 import 'package:prj/Models/User.dart';
@@ -11,16 +10,9 @@ class RoomCubit extends Cubit<RoomStates> {
   final RoomRepository roomRepository;
 
   Future<String> atStart(FireUser user) async {
-    emit(RoomJoinLoadingState());
+    emit(RoomLoadingState());
 
     try {
-      // final DatabaseReference userRef = FirebaseDatabase.instance.ref(
-      //   "users/${user.id}",
-      // );
-
-      // final DataSnapshot joinedSnapshot =
-      //     await userRef.child("joinedroom").get();
-
       final room = await roomRepository.recentlyFetch();
       if (room != null) {
         recently = room;
@@ -32,6 +24,8 @@ class RoomCubit extends Cubit<RoomStates> {
         emit(RoomInitialState());
         return "";
       } else {
+        emit(RoomInitialState());
+
         return joinedRoomCode;
       }
     } catch (e) {
@@ -61,6 +55,7 @@ class RoomCubit extends Cubit<RoomStates> {
     emit(RoomJoinLoadingState());
     try {
       final room = await roomRepository.joinRoom(roomCode);
+
       recently = room;
       emit(RecentlyUpdated());
       if (room == null) return;

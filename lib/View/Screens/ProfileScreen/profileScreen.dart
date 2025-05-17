@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prj/View/Screens/ProfileScreen/HelpingWidgets/profileInfo.dart';
 import 'package:prj/View/Screens/ProfileScreen/HelpingWidgets/profileOptions.dart';
 import 'package:prj/View/Screens/ProfileScreen/HelpingWidgets/profilePic.dart';
+import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
 import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
 import 'package:prj/core/colors.dart';
 
@@ -77,9 +78,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 context,
                               ).disableGuestMode();
                             } else {
-                              // BlocProvider.of<AuthCubit>(context).logout();
+                              await BlocProvider.of<AuthCubit>(
+                                context,
+                              ).logout(context);
 
-                              await FirebaseAuth.instance.signOut();
+                              // await FirebaseAuth.instance.signOut();
                             }
                             Navigator.pop(context);
                           },

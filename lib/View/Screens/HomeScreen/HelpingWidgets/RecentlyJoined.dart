@@ -11,77 +11,86 @@ class Recentlyjoined extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PomodoroRoom? room = BlocProvider.of<RoomCubit>(context).recently;
-    if (room == null) {
-      return Container();
-    }
-
-    final DatabaseReference usersRef = FirebaseDatabase.instance
-        .ref()
-        .child('rooms')
-        .child(room.roomCode)
-        .child('users');
-
-    return BlocListener<RoomCubit, RoomStates>(
-      listener: (context, state) {
-        if (state is RecentlyUpdated) {
-          room = BlocProvider.of<RoomCubit>(context).recently;
-        }
+    return BlocBuilder<RoomCubit, RoomStates>(
+      buildWhen: (prev, current) {
+        return current is RecentlyUpdated;
       },
-      child: GestureDetector(
-        onTap: () {
-          if (room == null) return;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RoomScreen(roomCode: room!.roomCode),
-            ),
-          );
-        },
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.blue[50],
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      room.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+      builder: (context, state) {
+        PomodoroRoom? room = BlocProvider.of<RoomCubit>(context).recently;
 
-                    StreamBuilder<DatabaseEvent>(
-                      stream: usersRef.onValue,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData &&
-                            snapshot.data!.snapshot.value != null) {
-                          final data = snapshot.data!.snapshot.value as Map;
-                          final userCount = data.length;
-                          return Text(
-                            "$userCount/30 active",
-                            style: const TextStyle(color: Colors.grey),
-                          );
-                        } else {
-                          return const Text(
-                            "0/30 active",
-                            style: TextStyle(color: Colors.grey),
-                          );
-                        }
-                      },
+        if (room == null) {
+          return const SizedBox(); // empty placeholder
+        }
+
+        final DatabaseReference usersRef = FirebaseDatabase.instance
+            .ref()
+            .child('rooms')
+            .child(room.roomCode)
+            .child('users');
+
+        return Column(
+          children: [
+            const Text(
+              "Recently Joined",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RoomScreen(roomCode: room!.roomCode),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            room.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          StreamBuilder<DatabaseEvent>(
+                            stream: usersRef.onValue,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data!.snapshot.value != null) {
+                                final data =
+                                    snapshot.data!.snapshot.value as Map;
+                                final userCount = data.length;
+                                return Text(
+                                  "$userCount/30 active",
+                                  style: const TextStyle(color: Colors.grey),
+                                );
+                              } else {
+                                return const Text(
+                                  "0/30 active",
+                                  style: TextStyle(color: Colors.grey),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
+                    const Icon(Icons.arrow_forward_ios, size: 16),
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, size: 16),
-            ],
-          ),
-        ),
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

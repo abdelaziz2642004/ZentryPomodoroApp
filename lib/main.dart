@@ -10,6 +10,10 @@ import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/accountOperations/account_cubit.dart';
 import 'package:prj/View/Screens/LoginScreen/LoginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:prj/ViewModel/Repositories/AccountOPS_Repo.dart';
+import 'package:prj/ViewModel/Repositories/Auth_Repo.dart';
+import 'package:prj/ViewModel/Repositories/Profile_Repo.dart';
+import 'package:prj/ViewModel/Services/cloudinaryService.dart';
 import 'package:prj/core/get_it.dart';
 import 'View/Screens/SplashScreen.dart';
 
@@ -33,9 +37,13 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
-        BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
-        BlocProvider<AccountCubit>(create: (context) => AccountCubit()),
+        BlocProvider<AuthCubit>(create: (context) => AuthCubit(AuthRepo())),
+        BlocProvider<ProfileCubit>(
+          create: (context) => ProfileCubit(ProfileRepo(CloudinaryService())),
+        ),
+        BlocProvider<AccountCubit>(
+          create: (context) => AccountCubit(AccountopsRepo()),
+        ),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
         BlocProvider<RoomCubit>(create: (context) => getIt<RoomCubit>()),
       ],
