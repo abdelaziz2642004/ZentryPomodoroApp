@@ -11,6 +11,9 @@ import 'package:prj/View/Screens/RoomScreen/RoomScreen.dart';
 import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
 import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/RoomOperations/Room_States.dart';
+import 'package:prj/core/colors.dart';
+
+import '../../Widgets/CreateRoomBottomSheet/CreateRoom.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -61,29 +64,28 @@ class _HomescreenState extends State<Homescreen> {
                 children: [
                   const Timetrackertoday(),
 
-                  ElevatedButton(
-                    onPressed: () async {
-                      final id = BlocProvider.of<AuthCubit>(context).user!.id;
-                      PomodoroRoom room = PomodoroRoom(
-                        name: "bgrbbbb",
-                        workDuration: 1,
-                        breakDuration: 5,
-                        totalSessions: 4,
-                        createdAt: Timestamp.now(),
-                        creatorId: id,
-                        availableRoom: true,
-                        capacity: 43,
-                        isPublic: true,
-                        tags: ["test", "room"],
-                        joinedUsers: [],
-                      );
-                      await BlocProvider.of<RoomCubit>(
-                        context,
-                      ).createRoom(room);
-                    },
-                    child: const Text("Create Random Test Room"),
-                  ),
-
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     final id = BlocProvider.of<AuthCubit>(context).user!.id;
+                  //     PomodoroRoom room = PomodoroRoom(
+                  //       name: "bgrbbbb",
+                  //       workDuration: 1,
+                  //       breakDuration: 5,
+                  //       totalSessions: 4,
+                  //       createdAt: Timestamp.now(),
+                  //       creatorId: id,
+                  //       availableRoom: true,
+                  //       capacity: 43,
+                  //       isPublic: true,
+                  //       tags: ["test", "room"],
+                  //       joinedUsers: [],
+                  //     );
+                  //     await BlocProvider.of<RoomCubit>(
+                  //       context,
+                  //     ).createRoom(room);
+                  //   },
+                  //   child: const Text("Create Random Test Room"),
+                  // ),
                   const SizedBox(height: 24),
                   const Text(
                     "Recently Joined",
@@ -110,6 +112,16 @@ class _HomescreenState extends State<Homescreen> {
             );
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (BuildContext context) => const CreateRoom(),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -6,10 +6,12 @@ import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/GuestMode/GuestMode_States.dart';
 import 'package:prj/ViewModel/Cubits/Profile/profile_cubit.dart';
 import 'package:prj/ViewModel/Cubits/Auth/Auth_cubit.dart';
+import 'package:prj/ViewModel/Cubits/Room/create_room_cubit.dart';
 import 'package:prj/ViewModel/Cubits/RoomOperations/Room_Cubit.dart';
 import 'package:prj/ViewModel/Cubits/accountOperations/account_cubit.dart';
 import 'package:prj/View/Screens/LoginScreen/LoginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:prj/core/get_it.dart';
 import 'View/Screens/SplashScreen.dart';
 
 // I want if the user joins a room then disconnets from the internet
@@ -27,7 +29,8 @@ import 'View/Screens/SplashScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  // most important 2 lines for firebase
+  setUpLocator();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -35,6 +38,7 @@ void main() async {
         BlocProvider<ProfileCubit>(create: (context) => ProfileCubit()),
         BlocProvider<AccountCubit>(create: (context) => AccountCubit()),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
+        BlocProvider<CreateRoomCubit>(create: (_) => getIt<CreateRoomCubit>()),
         BlocProvider<RoomCubit>(create: (context) => RoomCubit()),
       ],
       child: const MyApp(),
