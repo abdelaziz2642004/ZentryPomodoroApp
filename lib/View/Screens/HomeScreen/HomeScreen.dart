@@ -20,6 +20,7 @@ class _HomescreenState extends State<Homescreen> {
     return Scaffold(
       drawer: const Customdrawer(),
       appBar: Customappbar.build(),
+      backgroundColor: white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

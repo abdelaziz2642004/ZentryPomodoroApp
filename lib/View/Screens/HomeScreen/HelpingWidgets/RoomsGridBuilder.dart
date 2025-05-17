@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'RoomGridItems/RoomGridItem.dart';
+
 
 class Roomsgridbuilder extends StatelessWidget {
   const Roomsgridbuilder({super.key});
@@ -7,27 +9,18 @@ class Roomsgridbuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: 6,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.2,
+        childAspectRatio: 0.64,
         crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        mainAxisSpacing: 16,
       ),
-      itemBuilder:
-          (context, index) => Container(
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text(
-                "Room ${index + 1}",
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
+      itemBuilder: (context, index) => RoomGridItem(),
     );
   }
 }
+
+

@@ -24,6 +24,9 @@ class FormTextTitle extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(
         text,
+        softWrap: true,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
         style: TextStyle(
           fontWeight: fontWeight,
           fontSize: fontSize,

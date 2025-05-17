@@ -10,6 +10,7 @@ class CustomContainer extends StatelessWidget {
   final double vPadding;
   double? width;
   double? height;
+  double blurRadius;
 
   CustomContainer({
     super.key,
@@ -18,7 +19,8 @@ class CustomContainer extends StatelessWidget {
     this.vPadding = 2,
     this.color = light,
     this.width,
-    this.height
+    this.height,
+    this.blurRadius = 3
   });
 
   @override
@@ -29,8 +31,8 @@ class CustomContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(color: dark, offset: Offset(2, 2), blurRadius: 6),
+        boxShadow: [
+          BoxShadow(color: dark, offset: const Offset(2, 2), blurRadius: blurRadius),
         ],
       ),
       padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
