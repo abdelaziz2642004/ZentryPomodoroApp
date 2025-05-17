@@ -65,12 +65,9 @@ class PomodoroRoom {
   // attribute names from the database
   //collection names and docs
 
-  factory PomodoroRoom.fromRealtimeMap(
-    String roomcode,
-    Map<dynamic, dynamic> data,
-  ) {
+  factory PomodoroRoom.fromRealtimeMap(Map<dynamic, dynamic> data) {
     return PomodoroRoom(
-      roomCode: roomcode,
+      roomCode: data['roomCode'] ?? '',
       creatorId: data['creatorId'] ?? '',
       createdAt: Timestamp.fromMillisecondsSinceEpoch(data['createdAt'] ?? 0),
       availableRoom: data['availableRoom'] ?? true,

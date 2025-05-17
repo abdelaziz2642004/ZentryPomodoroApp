@@ -14,35 +14,25 @@ class RoomCubit extends Cubit<RoomStates> {
     emit(RoomJoinLoadingState());
 
     try {
-      final DatabaseReference userRef = FirebaseDatabase.instance.ref(
-        "users/${user.id}",
-      );
+      // final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+      //   "users/${user.id}",
+      // );
 
-      final DataSnapshot joinedSnapshot =
-          await userRef.child("joinedroom").get();
-      final DataSnapshot recentSnapshot = await userRef.child("recently").get();
+      // final DataSnapshot joinedSnapshot =
+      //     await userRef.child("joinedroom").get();
 
-      if (recentSnapshot.exists) {
-        final String recentRoomCode = recentSnapshot.value as String;
-
-        final DatabaseReference recentRoomRef = FirebaseDatabase.instance.ref(
-          "Rooms/$recentRoomCode",
-        );
-        final DataSnapshot recentRoomSnap = await recentRoomRef.get();
-
-        if (recentRoomSnap.exists) {
-          final roomData = recentRoomSnap.value as Map<dynamic, dynamic>;
-          recently = PomodoroRoom.fromRealtimeMap(recentRoomCode, roomData);
-        }
+      final room = await roomRepository.recentlyFetch();
+      if (room != null) {
+        recently = room;
+        emit(RecentlyUpdated());
       }
 
-      if (joinedSnapshot.exists) {
-        final String roomCode = joinedSnapshot.value as String;
-
-        return roomCode;
-      } else {
+      final joinedRoomCode = await roomRepository.joinedRoomFetch();
+      if (joinedRoomCode == null || joinedRoomCode == "") {
         emit(RoomInitialState());
         return "";
+      } else {
+        return joinedRoomCode;
       }
     } catch (e) {
       emit(RoomJoinFailure("Error during startup: ${e.toString()}"));

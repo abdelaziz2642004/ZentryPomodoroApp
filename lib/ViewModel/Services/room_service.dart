@@ -6,6 +6,52 @@ import 'package:prj/Models/PomodoroRoom.dart';
 class RoomService {
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<Map<dynamic, dynamic>?> recentlyFetch() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+    final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+      "users/${user.uid}",
+    );
+
+    // final DataSnapshot joinedSnapshot = await userRef.child("joinedroom").get();
+    final DataSnapshot recentSnapshot = await userRef.child("recently").get();
+    if (recentSnapshot.exists) {
+      final String recentRoomCode = recentSnapshot.value as String;
+
+      final DatabaseReference recentRoomRef = FirebaseDatabase.instance.ref(
+        "Rooms/$recentRoomCode",
+      );
+      final DataSnapshot recentRoomSnap = await recentRoomRef.get();
+
+      if (recentRoomSnap.exists) {
+        final roomData = recentRoomSnap.value as Map<dynamic, dynamic>;
+        // roomData['roomCode'] = recentRoomCode;
+        return roomData;
+      }
+      return null;
+    }
+    return null;
+  }
+
+  Future<String?> joinedRoomFetch() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+
+    final DatabaseReference userRef = FirebaseDatabase.instance.ref(
+      "users/${user.uid}",
+    );
+
+    final DataSnapshot joinedSnapshot = await userRef.child("joinedroom").get();
+
+    if (joinedSnapshot.exists) {
+      final String roomCode = joinedSnapshot.value as String;
+
+      return roomCode;
+    } else {
+      return "";
+    }
+  }
+
   Future<void> createRoom(PomodoroRoom room) async {
     // await _firestore.collection('rooms').add(room.toMap());
 
@@ -46,10 +92,8 @@ class RoomService {
           .remove(); // Remove on disconnect
 
       final roomData = roomSnapshot.value as Map<dynamic, dynamic>;
-      final PomodoroRoom room = PomodoroRoom.fromRealtimeMap(
-        roomCode,
-        roomData,
-      );
+      // roomData['roomCode'] = roomCode;
+      final PomodoroRoom room = PomodoroRoom.fromRealtimeMap(roomData);
 
       return room;
     } else {

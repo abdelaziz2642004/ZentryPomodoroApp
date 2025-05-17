@@ -28,10 +28,7 @@ class RoomsGridBuilder extends StatelessWidget {
         // Convert the map to a list of PomodoroRoom objects
         final publicRooms =
             roomsMap.entries
-                .map(
-                  (entry) =>
-                      PomodoroRoom.fromRealtimeMap(entry.key, entry.value),
-                )
+                .map((entry) => PomodoroRoom.fromRealtimeMap(entry.value))
                 .where((room) => room.isPublic)
                 .toList();
 
