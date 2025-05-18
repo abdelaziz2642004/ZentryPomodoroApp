@@ -28,7 +28,7 @@ import 'View/Screens/SplashScreen.dart';
 // and add the user also to the room in the realtime DB too
 // and if the room is null we will navigate to the login screen
 // and if the user is not logged in we will navigate to the login screen right away
-
+// ay hora2
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
