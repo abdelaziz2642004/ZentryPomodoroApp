@@ -29,6 +29,7 @@ import 'View/Screens/SplashScreen.dart';
 // and if the room is null we will navigate to the login screen
 // and if the user is not logged in we will navigate to the login screen right away
 // ay hora2
+// lol
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
