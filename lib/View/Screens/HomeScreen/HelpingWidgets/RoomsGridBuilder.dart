@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 
 import '../../../Widgets/RoomGridItems/RoomGridItem.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class RoomsGridBuilder extends StatelessWidget {
   const RoomsGridBuilder({super.key});
@@ -28,29 +30,25 @@ class RoomsGridBuilder extends StatelessWidget {
 
         // Convert the map to a list of PomodoroRoom objects
         final allRooms =
-        roomsMap.entries
-            .map(
-              (entry) =>
-              PomodoroRoom.fromRealtimeMap(entry.value),
-        )
-            .toList();
+            roomsMap.entries
+                .map((entry) => PomodoroRoom.fromRealtimeMap(entry.value))
+                .toList();
 
         if (allRooms.isEmpty) {
           return const Center(child: Text("No public rooms available."));
         }
 
-        return GridView.builder(
+        return MasonryGridView.count(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: allRooms.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.64,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 16,
-          ),
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 16,
           itemBuilder: (context, index) => RoomGridItem(room: allRooms[index]),
         );
+
+
       },
     );
   }

@@ -1,5 +1,5 @@
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../../../core/colors.dart';
 import '../../HelpingWidgets/CustomButton.dart';
@@ -11,15 +11,16 @@ class JoinButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: CustomButton(
-        onTap: () {},
-        content: const Text(
-          "Join",
-          style: TextStyle(color: white),
-        ),
-        bgColor: mainColor,
-      ),
+    return CustomButton(
+      //width: 15,
+      hPadding: 8,
+      onTap: () {},
+      content: const Icon(Icons.play_arrow, color: white,size: 22,),
+      // content: const Text(
+      //   "Join",
+      //   style: TextStyle(color: white),
+      // ),
+      bgColor: mainColor,
     );
   }
 }

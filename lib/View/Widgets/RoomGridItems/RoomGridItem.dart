@@ -50,11 +50,12 @@ class RoomGridItem extends StatelessWidget {
         return Stack(
           children: [
             CustomContainer(
-              color: white,
+              color: Colors.white,
               blurRadius: 4,
               child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 18),
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 18, bottom: 12),
                 child: Column(
+                  //mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     /// Room Name
@@ -67,7 +68,7 @@ class RoomGridItem extends StatelessWidget {
 
                     /// Sessions Info
                     SessionInfo(numberOfSessions: numberOfSessions,),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
 
                     /// Work & Break Time
                     WorkBreakView(
@@ -83,11 +84,9 @@ class RoomGridItem extends StatelessWidget {
                       iconColor: Colors.orange,
                       title: "Break Time: ",
                     ),
-                    const SizedBox(height: 8),
 
                     /// Tags
                     Tags(tags: tags),
-                    const SizedBox(height: 8),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

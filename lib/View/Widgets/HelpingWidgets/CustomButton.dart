@@ -7,6 +7,8 @@ class CustomButton extends StatelessWidget {
   Color bgColor;
   double? width;
   double? height;
+  double? hPadding;
+  double? vPadding;
 
   CustomButton({
     super.key,
@@ -15,6 +17,8 @@ class CustomButton extends StatelessWidget {
     required this.bgColor,
     this.width,
     this.height,
+    this.hPadding,
+    this.vPadding,
   });
 
   @override
@@ -24,7 +28,9 @@ class CustomButton extends StatelessWidget {
       child: CustomContainer(
         color: bgColor,
         width: width,
-        vPadding: 8, child: content
+        vPadding: vPadding ?? 2,
+        hPadding: hPadding ?? 4,
+        child: content,
       ),
     );
   }
