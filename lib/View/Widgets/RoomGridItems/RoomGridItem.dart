@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
@@ -18,11 +19,21 @@ class RoomGridItem extends StatelessWidget {
 
   RoomGridItem({super.key, required this.room});
 
-  Future<String?> fetchCreatorName(String creatorId) async {
-    final ref = FirebaseDatabase.instance.ref('Users/$creatorId/name');
-    final snapshot = await ref.get();
-    if (snapshot.exists) {
-      return snapshot.value.toString();
+  Future<String> fetchCreatorName(String creatorId) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(creatorId)
+          .get();
+
+      if (doc.exists) {
+        final data = doc.data();
+        if (data != null && data.containsKey('username')) {
+          return data['username'] as String;
+        }
+      }
+    } catch (e) {
+      print("Error fetching username: $e");
     }
     return "Unknown";
   }
