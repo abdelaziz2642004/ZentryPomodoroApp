@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import '../../../../../../core/colors.dart';
 
 class SessionInfo extends StatelessWidget {
-  const SessionInfo({
+  int numberOfSessions;
+  SessionInfo({
     super.key,
+    required this.numberOfSessions
   });
 
   @override
@@ -18,9 +20,9 @@ class SessionInfo extends StatelessWidget {
         color: lightGrey.withOpacity(0.2),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: const Text(
-        "1/5 sessions",
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+      child: Text(
+        "1/$numberOfSessions sessions",
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
     );
   }

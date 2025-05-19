@@ -31,4 +31,8 @@ class RoomRepository {
   Future<String?> joinedRoomFetch() async {
     return await _roomService.joinedRoomFetch();
   }
+
+  // Future<List<PomodoroRoom>> fetchAllRooms(){
+  //   return _roomService.fetchAllRooms();
+  // }
 }

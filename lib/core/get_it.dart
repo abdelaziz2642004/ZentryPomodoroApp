@@ -14,3 +14,5 @@ void setUpLocator() {
 
   getIt.registerFactory<RoomCubit>(() => RoomCubit(getIt<RoomRepository>()));
 }
+
+

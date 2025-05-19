@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../../../../core/colors.dart';
-import '../../../../../Widgets/HelpingWidgets/CustomContainer.dart';
+import '../../HelpingWidgets/CustomContainer.dart';
 
 class Tags extends StatelessWidget {
   const Tags({

@@ -1,9 +1,12 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:prj/Models/PomodoroRoom.dart';
 
 class RoomService {
+  final DatabaseReference _roomsRef = FirebaseDatabase.instance.ref('rooms');
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<Map<dynamic, dynamic>?> recentlyFetch() async {
@@ -118,4 +121,21 @@ class RoomService {
 
     userRef2.child("joinedroom").remove();
   }
+
+
+  // Future<List<PomodoroRoom>> fetchAllRooms() async {
+  //   final roomsSnap = await _roomsRef.get();
+  //
+  //   if (roomsSnap.exists) {
+  //     final List roomsSnapList = roomsSnap.value as List<dynamic>;
+  //     final List<PomodoroRoom> roomsList =
+  //         roomsSnapList.map((roomSnap) {
+  //           return PomodoroRoom.fromDocument(roomSnap);
+  //         }).toList();
+  //
+  //     return roomsList;
+  //   } else {
+  //     return [];
+  //   }
+  // }
 }

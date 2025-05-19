@@ -25,7 +25,7 @@ class RoomDetailsAndTimer extends StatelessWidget {
               "Error: ${state.error}",
               style: const TextStyle(color: Colors.red),
             ),
-          );
+          );////
         } else if (state is RoomJoinSuccess) {
           final roomDetails = state.room;
           return Column(

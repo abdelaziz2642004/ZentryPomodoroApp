@@ -16,6 +16,7 @@ import 'package:prj/ViewModel/Repositories/Profile_Repo.dart';
 import 'package:prj/ViewModel/Services/cloudinaryService.dart';
 import 'package:prj/core/get_it.dart';
 import 'View/Screens/SplashScreen.dart';
+import 'ViewModel/Cubits/Room/RoomDetails/room_details_cubit.dart';
 
 // I want if the user joins a room then disconnets from the internet
 // and then reconnects to the internet, the app should show the room screen right away
@@ -47,6 +48,8 @@ void main() async {
         ),
         BlocProvider<GuestmodeCubit>(create: (context) => GuestmodeCubit()),
         BlocProvider<RoomCubit>(create: (context) => getIt<RoomCubit>()),
+        // BlocProvider<RoomDetailsCubit>(create: (_) => getIt<RoomDetailsCubit>()),
+
       ],
       child: const MyApp(),
     ),
